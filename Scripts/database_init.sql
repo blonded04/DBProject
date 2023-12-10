@@ -14,7 +14,13 @@ CREATE TYPE item_type AS ENUM ('Character', 'Artifact', 'Weapon');
 
 -- tables creation
 -- updates
-
+DROP TABLE IF EXISTS updates CASCADE;
+CREATE TABLE updates (
+  id SERIAL PRIMARY KEY,
+  version FLOAT NOT NULL,
+  type item_type NOT NULL,
+  item_id INT NOT NULL #нужна замена через references
+);
 
 -- characters
 DROP TABLE IF EXISTS characters CASCADE;
@@ -25,16 +31,32 @@ CREATE TABLE characters(
 
 
 -- artifacts
-
+DROP TABLE IF EXISTS artifacts CASCADE;
+CREATE TABLE artifacts (
+  id SERIAL PRIMARY KEY,
+  set_name text NOT NULL UNIQUE,
+  update int references updates(id),
+  type artifact_type NOT NULL,
+  stats INT references stats(id),
+  set_bonus_stats INT references stats(id)
+);
 
 -- weapons
-
-
+DROP TABLE IF EXISTS weapons CASCADE;
+CREATE TABLE weapons (
+  id SERIAL PRIMARY KEY,
+  name text NOT NULL UNIQUE,
+  stats INT references stats(id),
+  update INT references updates(id),
+  type weapon_type NOT NULL
+);
 -- elements
 DROP TABLE IF EXISTS elements CASCADE;
 CREATE TABLE elements(
     id SERIAL PRIMARY KEY,
-    aboba TEXT
+    type element_type NOT NULL,
+    country int references countries(id),
+    reactions int
 );
 
 
