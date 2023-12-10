@@ -20,6 +20,7 @@ CREATE TYPE item_type AS ENUM ('Character', 'Artifact', 'Weapon');
 DROP TABLE IF EXISTS characters CASCADE;
 CREATE TABLE characters(
     id SERIAL PRIMARY KEY,
+    
     aboba TEXT
 );
 
@@ -78,11 +79,11 @@ CREATE TABLE players(
 -- skills
 DROP TABLE IF EXISTS skills CASCADE;
 CREATE TABLE skills(
+    id SERIAL PRIMARY KEY,
 	name TEXT,
 	character_id INT REFERENCES characters(id),
-	type skill_type,
+	type skill_type NOT NULL,
 	base_damage INT DEFAULT 0,
 	base_heal FLOAT DEFAULT 0,
-	cooldown FLOAT DEFAULT 5.5,
-	PRIMARY KEY(character_id, type)
+	cooldown FLOAT DEFAULT 5.5
 );
