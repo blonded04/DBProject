@@ -76,7 +76,7 @@ CREATE TABLE players(
 DROP TABLE IF EXISTS skills CASCADE;
 CREATE TABLE skills(
     id SERIAL PRIMARY KEY,
-    name TEXT,
+    name TEXT NOT NULL UNIQUE,
     type skill_type NOT NULL,
     base_damage INT DEFAULT 0,
     base_heal FLOAT DEFAULT 0,
