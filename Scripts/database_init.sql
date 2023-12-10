@@ -28,8 +28,9 @@ CREATE TABLE updates (
 DROP TABLE IF EXISTS artifacts CASCADE;
 CREATE TABLE artifacts (
     id SERIAL PRIMARY KEY,
-    set_name TEXT NOT NULL UNIQUE,
-    type artifact_type NOT NULL
+    set_name TEXT NOT NULL,
+    type artifact_type NOT NULL,
+    UNIQUE (set_name, type)
 );
 
 -- weapons
@@ -43,12 +44,12 @@ CREATE TABLE weapons (
 -- elements
 DROP TABLE IF EXISTS elements CASCADE;
 CREATE TABLE elements(
-    id SERIAL PRIMARY KEY,
-    type element_type NOT NULL,
-    reactions INT DEFAULT 0
+    type element_type PRIMARY KEY,
+    reactions BOOLEAN[8] DEFAULT '{false, false, false, false, false, false, false, false}'::BOOLEAN[]
 );
 
 -- countries
+
 
 -- units
 
@@ -61,21 +62,21 @@ CREATE TABLE stats(
     hp INT DEFAULT 0,
     hp_coef FLOAT DEFAULT 1,
     heal_coef FLOAT DEFAULT 0,
-    elemental_coef FLOAT DEFAULT 1
+    elemental_coefs FLOAT[8] DEFAULT '{1, 1, 1, 1, 1, 1, 1, 1}'::FLOAT[]
 );
 
 -- players
 DROP TABLE IF EXISTS players CASCADE;
 CREATE TABLE players(
     id SERIAL PRIMARY KEY,
-    elemental_bonus FLOAT[] DEFAULT '{0, 0, 0, 0, 0, 0, 0, 0}'::FLOAT[]
+    elemental_bonus FLOAT[8] DEFAULT '{0, 0, 0, 0, 0, 0, 0, 0}'::FLOAT[]
 );
 
 -- skills
 DROP TABLE IF EXISTS skills CASCADE;
 CREATE TABLE skills(
     id SERIAL PRIMARY KEY,
-    name TEXT,
+    name TEXT NOT NULL UNIQUE,
     type skill_type NOT NULL,
     base_damage INT DEFAULT 0,
     base_heal FLOAT DEFAULT 0,
@@ -92,11 +93,13 @@ ALTER TABLE weapons ADD COLUMN update INT references updates(id);
 
 --ALTER TABLE elements ADD COLUMN country int references countries(id);
 
-ALTER TABLE stats ADD COLUMN element INT REFERENCES elements(id);
-
 --ALTER TABLE players ADD COLUMN unit_1 INT REFERENCES units(id);
 --ALTER TABLE players ADD COLUMN unit_2 INT REFERENCES units(id);
 --ALTER TABLE players ADD COLUMN unit_3 INT REFERENCES units(id);
 --ALTER TABLE players ADD COLUMN unit_4 INT REFERENCES units(id);
 
 --ALTER TABLE skills ADD COLUMN character_id INT REFERENCES characters(id);
+
+ALTER TABLE stats ADD CHECK (array_ndims(elemental_coefs) = 1 AND array_length(elemental_coefs, 1) = 8);
+ALTER TABLE players ADD CHECK (array_ndims(elemental_bonus) = 1 AND array_length(elemental_bonus, 1) = 8);
+ALTER TABLE elements ADD CHECK (array_ndims(reactions) = 1 AND array_length(reactions, 1) = 8);
