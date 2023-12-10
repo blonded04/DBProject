@@ -19,7 +19,7 @@ CREATE TABLE updates (
   id SERIAL PRIMARY KEY,
   version FLOAT NOT NULL,
   type item_type NOT NULL,
-  item_id INT NOT NULL #нужна замена через references
+  item_id INT NOT NULL
 );
 
 -- characters
