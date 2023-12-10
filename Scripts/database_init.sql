@@ -20,7 +20,6 @@ CREATE TYPE item_type AS ENUM ('Character', 'Artifact', 'Weapon');
 DROP TABLE IF EXISTS characters CASCADE;
 CREATE TABLE characters(
     id SERIAL PRIMARY KEY,
-    
     aboba TEXT
 );
 
@@ -59,8 +58,8 @@ CREATE TABLE stats(
     hp INT DEFAULT 0,
     hp_coef FLOAT DEFAULT 1,
     heal_coef FLOAT DEFAULT 0,
-	element INT REFERENCES elements(id),
-	elemental_coef FLOAT DEFAULT 1
+    element INT REFERENCES elements(id),
+    elemental_coef FLOAT DEFAULT 1
 );
 
 
@@ -68,11 +67,11 @@ CREATE TABLE stats(
 DROP TABLE IF EXISTS players CASCADE;
 CREATE TABLE players(
     id SERIAL PRIMARY KEY,
-	unit_1 INT REFERENCES units(id),
-	unit_2 INT REFERENCES units(id),
-	unit_3 INT REFERENCES units(id),
-	unit_4 INT REFERENCES units(id),
-	elemental_bonus FLOAT[] DEFAULT '{0, 0, 0, 0, 0, 0, 0, 0}'::FLOAT[]
+    unit_1 INT REFERENCES units(id),
+    unit_2 INT REFERENCES units(id),
+    unit_3 INT REFERENCES units(id),
+    unit_4 INT REFERENCES units(id),
+    elemental_bonus FLOAT[] DEFAULT '{0, 0, 0, 0, 0, 0, 0, 0}'::FLOAT[]
 );
 
 
@@ -80,10 +79,10 @@ CREATE TABLE players(
 DROP TABLE IF EXISTS skills CASCADE;
 CREATE TABLE skills(
     id SERIAL PRIMARY KEY,
-	name TEXT,
-	character_id INT REFERENCES characters(id),
-	type skill_type NOT NULL,
-	base_damage INT DEFAULT 0,
-	base_heal FLOAT DEFAULT 0,
-	cooldown FLOAT DEFAULT 5.5
+    name TEXT,
+    character_id INT REFERENCES characters(id),
+    type skill_type NOT NULL,
+    base_damage INT DEFAULT 0,
+    base_heal FLOAT DEFAULT 0,
+    cooldown FLOAT DEFAULT 5.5
 );
