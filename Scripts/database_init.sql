@@ -16,60 +16,41 @@ CREATE TYPE item_type AS ENUM ('Character', 'Artifact', 'Weapon');
 -- updates
 DROP TABLE IF EXISTS updates CASCADE;
 CREATE TABLE updates (
-  id SERIAL PRIMARY KEY,
-  version FLOAT NOT NULL,
-  type item_type NOT NULL,
-  item_id INT NOT NULL
+    id SERIAL PRIMARY KEY,
+    version FLOAT NOT NULL,
+    type item_type NOT NULL,
+    item_id INT NOT NULL
 );
 
 -- characters
-DROP TABLE IF EXISTS characters CASCADE;
-CREATE TABLE characters(
-    id SERIAL PRIMARY KEY,
-    aboba TEXT
-);
-
 
 -- artifacts
 DROP TABLE IF EXISTS artifacts CASCADE;
 CREATE TABLE artifacts (
-  id SERIAL PRIMARY KEY,
-  set_name text NOT NULL UNIQUE,
-  update int references updates(id),
-  type artifact_type NOT NULL,
-  stats INT references stats(id),
-  set_bonus_stats INT references stats(id)
+    id SERIAL PRIMARY KEY,
+    set_name TEXT NOT NULL UNIQUE,
+    type artifact_type NOT NULL
 );
 
 -- weapons
 DROP TABLE IF EXISTS weapons CASCADE;
 CREATE TABLE weapons (
-  id SERIAL PRIMARY KEY,
-  name text NOT NULL UNIQUE,
-  stats INT references stats(id),
-  update INT references updates(id),
-  type weapon_type NOT NULL
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL UNIQUE,
+    type weapon_type NOT NULL
 );
+
 -- elements
 DROP TABLE IF EXISTS elements CASCADE;
 CREATE TABLE elements(
     id SERIAL PRIMARY KEY,
     type element_type NOT NULL,
-    country int references countries(id),
-    reactions int
+    reactions INT DEFAULT 0
 );
-
 
 -- countries
 
-
 -- units
-DROP TABLE IF EXISTS units CASCADE;
-CREATE TABLE units(
-    id SERIAL PRIMARY KEY,
-    aboba TEXT
-);
-
 
 -- stats
 DROP TABLE IF EXISTS stats CASCADE;
@@ -80,31 +61,42 @@ CREATE TABLE stats(
     hp INT DEFAULT 0,
     hp_coef FLOAT DEFAULT 1,
     heal_coef FLOAT DEFAULT 0,
-    element INT REFERENCES elements(id),
     elemental_coef FLOAT DEFAULT 1
 );
-
 
 -- players
 DROP TABLE IF EXISTS players CASCADE;
 CREATE TABLE players(
     id SERIAL PRIMARY KEY,
-    unit_1 INT REFERENCES units(id),
-    unit_2 INT REFERENCES units(id),
-    unit_3 INT REFERENCES units(id),
-    unit_4 INT REFERENCES units(id),
     elemental_bonus FLOAT[] DEFAULT '{0, 0, 0, 0, 0, 0, 0, 0}'::FLOAT[]
 );
-
 
 -- skills
 DROP TABLE IF EXISTS skills CASCADE;
 CREATE TABLE skills(
     id SERIAL PRIMARY KEY,
     name TEXT,
-    character_id INT REFERENCES characters(id),
     type skill_type NOT NULL,
     base_damage INT DEFAULT 0,
     base_heal FLOAT DEFAULT 0,
     cooldown FLOAT DEFAULT 5.5
 );
+
+-- adding foreign keys
+ALTER TABLE artifacts ADD COLUMN update INT references updates(id);
+ALTER TABLE artifacts ADD COLUMN stats INT references stats(id);
+ALTER TABLE artifacts ADD COLUMN set_bonus_stats INT references stats(id);
+
+ALTER TABLE weapons ADD COLUMN stats INT references stats(id);
+ALTER TABLE weapons ADD COLUMN update INT references updates(id);
+
+--ALTER TABLE elements ADD COLUMN country int references countries(id);
+
+ALTER TABLE stats ADD COLUMN element INT REFERENCES elements(id);
+
+--ALTER TABLE players ADD COLUMN unit_1 INT REFERENCES units(id);
+--ALTER TABLE players ADD COLUMN unit_2 INT REFERENCES units(id);
+--ALTER TABLE players ADD COLUMN unit_3 INT REFERENCES units(id);
+--ALTER TABLE players ADD COLUMN unit_4 INT REFERENCES units(id);
+
+--ALTER TABLE skills ADD COLUMN character_id INT REFERENCES characters(id);
