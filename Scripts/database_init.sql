@@ -27,7 +27,7 @@ CREATE TABLE updates (
 -- artifacts
 DROP TABLE IF EXISTS artifacts CASCADE;
 CREATE TABLE artifacts (
-    id SERIAL PRIMARY KEY,
+    name TEXT PRIMARY KEY,
     set_name TEXT NOT NULL,
     type artifact_type NOT NULL,
     UNIQUE (set_name, type)
@@ -36,8 +36,7 @@ CREATE TABLE artifacts (
 -- weapons
 DROP TABLE IF EXISTS weapons CASCADE;
 CREATE TABLE weapons (
-    id SERIAL PRIMARY KEY,
-    name TEXT NOT NULL UNIQUE,
+    name TEXT PRIMARY KEY,
     type weapon_type NOT NULL
 );
 
@@ -75,8 +74,7 @@ CREATE TABLE players(
 -- skills
 DROP TABLE IF EXISTS skills CASCADE;
 CREATE TABLE skills(
-    id SERIAL PRIMARY KEY,
-    name TEXT NOT NULL UNIQUE,
+    name TEXT PRIMARY KEY,
     type skill_type NOT NULL,
     base_damage INT DEFAULT 0,
     base_heal FLOAT DEFAULT 0,
@@ -91,14 +89,14 @@ ALTER TABLE artifacts ADD COLUMN set_bonus_stats INT references stats(id);
 ALTER TABLE weapons ADD COLUMN stats INT references stats(id);
 ALTER TABLE weapons ADD COLUMN update INT references updates(id);
 
---ALTER TABLE elements ADD COLUMN country int references countries(id);
+--ALTER TABLE elements ADD COLUMN country TEXT references countries(name);
 
 --ALTER TABLE players ADD COLUMN unit_1 INT REFERENCES units(id);
 --ALTER TABLE players ADD COLUMN unit_2 INT REFERENCES units(id);
 --ALTER TABLE players ADD COLUMN unit_3 INT REFERENCES units(id);
 --ALTER TABLE players ADD COLUMN unit_4 INT REFERENCES units(id);
 
---ALTER TABLE skills ADD COLUMN character_id INT REFERENCES characters(id);
+--ALTER TABLE skills ADD COLUMN character TEXT REFERENCES characters(name);
 
 ALTER TABLE stats ADD CHECK (array_ndims(elemental_coefs) = 1 AND array_length(elemental_coefs, 1) = 8);
 ALTER TABLE players ADD CHECK (array_ndims(elemental_bonus) = 1 AND array_length(elemental_bonus, 1) = 8);
