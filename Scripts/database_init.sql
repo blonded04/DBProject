@@ -28,8 +28,9 @@ CREATE TABLE updates (
 DROP TABLE IF EXISTS artifacts CASCADE;
 CREATE TABLE artifacts (
     id SERIAL PRIMARY KEY,
-    set_name TEXT NOT NULL UNIQUE,
-    type artifact_type NOT NULL
+    set_name TEXT NOT NULL,
+    type artifact_type NOT NULL,
+    UNIQUE (set_name, type)
 );
 
 -- weapons
