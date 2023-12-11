@@ -31,18 +31,18 @@ CREATE TABLE updates (
     id SERIAL PRIMARY KEY,
     version FLOAT NOT NULL,
     type t_item NOT NULL,
-    item_id INT NOT NULL
+    item TEXT NOT NULL
 );
 
 -- stats
 CREATE TABLE stats(
     id SERIAL PRIMARY KEY,
     damage INT DEFAULT 0,
-    damage_coef FLOAT DEFAULT 1,
+    damage_coef FLOAT DEFAULT 0,
     hp INT DEFAULT 0,
-    hp_coef FLOAT DEFAULT 1,
+    hp_coef FLOAT DEFAULT 0,
     heal_coef FLOAT DEFAULT 0,
-    elemental_coefs FLOAT[8] DEFAULT '{1, 1, 1, 1, 1, 1, 1, 1}'::FLOAT[]
+    elemental_coefs FLOAT[8] DEFAULT '{0, 0, 0, 0, 0, 0, 0, 0}'::FLOAT[]
 );
 
 -- artifacts
