@@ -88,6 +88,11 @@ CREATE TABLE characters(
 -- units
 CREATE TABLE units(
     id SERIAL PRIMARY KEY,
+    character TEXT REFERENCES characters(name),
+    weapon TEXT REFERENCES weapons(name),
+    flower_artifact TEXT REFERENCES artifacts(name),
+    clock_artifact TEXT REFERENCES artifacts(name),
+    hat_artifact TEXT REFERENCES artifacts(name),
     total_hp INT DEFAULT 1000,
     additional_damage INT DEFAULT 0,
     boost_damage FLOAT DEFAULT 1,
@@ -110,4 +115,22 @@ ALTER TABLE stats ADD CHECK (array_ndims(elemental_coefs) = 1 AND array_length(e
 ALTER TABLE players ADD CHECK (array_ndims(elemental_bonus) = 1 AND array_length(elemental_bonus, 1) = 8);
 ALTER TABLE units ADD CHECK (array_ndims(boost_elemental) = 1 AND array_length(boost_elemental, 1) = 8);
 ALTER TABLE elements ADD CHECK (array_ndims(reactions) = 1 AND array_length(reactions, 1) = 8);
-ALTER TABLE elements ADD CHECK (array_ndims(reactions) = 1 AND array_length(reactions, 1) = 8);
+
+CREATE OR REPLACE FUNCTION weapon_check("character" TEXT, weapon TEXT) RETURNS BOOLEAN AS $$ 
+BEGIN
+RETURN (SELECT weapon_type FROM "characters" WHERE "name" = "character") = (SELECT "type" FROM weapons WHERE "name" = weapon);
+END;
+$$ LANGUAGE plpgsql;
+
+ALTER TABLE units ADD CHECK (weapon_check("character", weapon));
+
+CREATE OR REPLACE FUNCTION artifact_check(artifact TEXT, "type" TEXT) RETURNS BOOLEAN AS $$ 
+BEGIN
+RETURN ((SELECT "type" FROM "artifacts" WHERE "name" = artifact) = "type");
+END;
+$$ LANGUAGE plpgsql;
+
+ALTER TABLE units ADD CHECK (artifact_check(flower_artifact, 'Flower'));
+ALTER TABLE units ADD CHECK (artifact_check(clock_artifact, 'Clock'));
+ALTER TABLE units ADD CHECK (artifact_check(hat_artifact, 'Hat'));
+
