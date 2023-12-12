@@ -36,152 +36,152 @@ INSERT INTO countries(name, element, archont) VALUES ('Snezhnaya', 'Anemo', 'Tsa
 WITH weapon_stats AS (INSERT INTO stats(damage, hp) VALUES (542, 265) RETURNING id),
      item_update AS (INSERT INTO updates(version, type, item) VALUES (3.2, 'Weapon', 'A Thousand Floating Dreams') RETURNING id)
 INSERT INTO weapons(name, type, stats, update)
-SELECT 'A Thousand Floating Dreams', 'Catalyst', (SELECT id FROM stats), (SELECT id FROM item_update)
-FROM stats, item_update;
+SELECT 'A Thousand Floating Dreams', 'Catalyst', (SELECT id FROM weapon_stats), (SELECT id FROM item_update)
+FROM weapon_stats, item_update;
 
 WITH weapon_stats AS (INSERT INTO stats(damage, damage_coef) VALUES (674, 0.221) RETURNING id),
      item_update AS (INSERT INTO updates(version, type, item) VALUES (4.1, 'Weapon', 'Cashflow Supervision') RETURNING id)
 INSERT INTO weapons(name, type, stats, update)
-SELECT 'Cashflow Supervision', 'Catalyst', (SELECT id FROM stats limit 1), (SELECT id FROM item_update limit 1)
-FROM stats, item_update;
+SELECT 'Cashflow Supervision', 'Catalyst', (SELECT id FROM weapon_stats), (SELECT id FROM item_update)
+FROM weapon_stats, item_update;
 
 WITH weapon_stats AS (INSERT INTO stats(damage, hp_coef) VALUES (608, 0.496) RETURNING id),
      item_update AS (INSERT INTO updates(version, type, item) VALUES (2.1, 'Weapon', 'Everlasting Moonglow') RETURNING id)
 INSERT INTO weapons(name, type, stats, update)
-SELECT 'Everlasting Moonglow', 'Catalyst', (SELECT id FROM stats limit 1), (SELECT id FROM item_update limit 1)
-FROM stats, item_update;
+SELECT 'Everlasting Moonglow', 'Catalyst', (SELECT id FROM weapon_stats), (SELECT id FROM item_update)
+FROM weapon_stats, item_update;
 
 WITH weapon_stats AS (INSERT INTO stats(damage, damage_coef) VALUES (608, 0.496) RETURNING id),
      item_update AS (INSERT INTO updates(version, type, item) VALUES (3.6, 'Weapon', 'Jadefalls Splendor') RETURNING id)
 INSERT INTO weapons(name, type, stats, update)
-SELECT 'Jadefalls Splendor', 'Catalyst', (SELECT id FROM stats limit 1), (SELECT id FROM item_update limit 1)
-FROM stats, item_update;
+SELECT 'Jadefalls Splendor', 'Catalyst', (SELECT id FROM weapon_stats), (SELECT id FROM item_update)
+FROM weapon_stats, item_update;
 
 
 --bows
 WITH weapon_stats AS (INSERT INTO stats(damage, damage_coef) VALUES (608, 0.496) RETURNING id),
      item_update AS (INSERT INTO updates(version, type, item) VALUES (1.0, 'Weapon', 'Amos Bow') RETURNING id)
 INSERT INTO weapons(name, type, stats, update)
-SELECT 'Amos Bow', 'Bow', (SELECT id FROM stats), (SELECT id FROM item_update)
-FROM stats, item_update;
+SELECT 'Amos Bow', 'Bow', (SELECT id FROM weapon_stats), (SELECT id FROM item_update)
+FROM weapon_stats, item_update;
 
 WITH weapon_stats AS (INSERT INTO stats(damage, damage_coef) VALUES (542, 0.882) RETURNING id),
      item_update AS (INSERT INTO updates(version, type, item) VALUES (2.7, 'Weapon', 'Aqua Simulacra') RETURNING id)
 INSERT INTO weapons(name, type, stats, update)
-SELECT 'Aqua Simulacra', 'Bow', (SELECT id FROM stats), (SELECT id FROM item_update)
-FROM stats, item_update;
+SELECT 'Aqua Simulacra', 'Bow', (SELECT id FROM weapon_stats), (SELECT id FROM item_update)
+FROM weapon_stats, item_update;
 
 WITH weapon_stats AS (INSERT INTO stats(damage, hp_coef) VALUES (608, 0.551) RETURNING id),
      item_update AS (INSERT INTO updates(version, type, item) VALUES (1.4, 'Weapon', 'Elegy for the End') RETURNING id)
 INSERT INTO weapons(name, type, stats, update)
-SELECT 'Elegy for the End', 'Bow', (SELECT id FROM stats), (SELECT id FROM item_update)
-FROM stats, item_update;
+SELECT 'Elegy for the End', 'Bow', (SELECT id FROM weapon_stats), (SELECT id FROM item_update)
+FROM weapon_stats, item_update;
 
 WITH weapon_stats AS (INSERT INTO stats(damage, damage_coef) VALUES (542, 0.441) RETURNING id),
      item_update AS (INSERT INTO updates(version, type, item) VALUES (3.0, 'Weapon', 'Hunters Path') RETURNING id)
 INSERT INTO weapons(name, type, stats, update)
-SELECT 'Hunters Path', 'Bow', (SELECT id FROM stats), (SELECT id FROM item_update)
-FROM stats, item_update;
+SELECT 'Hunters Path', 'Bow', (SELECT id FROM weapon_stats), (SELECT id FROM item_update)
+FROM weapon_stats, item_update;
 
 WITH weapon_stats AS (INSERT INTO stats(damage, damage_coef) VALUES (608, 0.331) RETURNING id),
      item_update AS (INSERT INTO updates(version, type, item) VALUES (2.2, 'Weapon', 'Polar Star') RETURNING id)
 INSERT INTO weapons(name, type, stats, update)
-SELECT 'Polar Star', 'Bow', (SELECT id FROM stats), (SELECT id FROM item_update)
-FROM stats, item_update;
+SELECT 'Polar Star', 'Bow', (SELECT id FROM weapon_stats), (SELECT id FROM item_update)
+FROM weapon_stats, item_update;
 
 --spear
 WITH weapon_stats AS (INSERT INTO stats(damage, damage_coef) VALUES (741, 0.165) RETURNING id),
      item_update AS (INSERT INTO updates(version, type, item) VALUES (2.4, 'Weapon', 'Calamity Queller') RETURNING id)
 INSERT INTO weapons(name, type, stats, update)
-SELECT 'Calamity Queller', 'Spear', (SELECT id FROM stats), (SELECT id FROM item_update)
-FROM stats, item_update;
+SELECT 'Calamity Queller', 'Spear', (SELECT id FROM weapon_stats), (SELECT id FROM item_update)
+FROM weapon_stats, item_update;
 
 WITH weapon_stats AS (INSERT INTO stats(damage, hp_coef) VALUES (608, 0.551) RETURNING id),
      item_update AS (INSERT INTO updates(version, type, item) VALUES (2.1, 'Weapon', 'Engulfing Lightning') RETURNING id)
 INSERT INTO weapons(name, type, stats, update)
-SELECT 'Engulfing Lightning', 'Spear', (SELECT id FROM stats), (SELECT id FROM item_update)
-FROM stats, item_update;
+SELECT 'Engulfing Lightning', 'Spear', (SELECT id FROM weapon_stats), (SELECT id FROM item_update)
+FROM weapon_stats, item_update;
 
 WITH weapon_stats AS (INSERT INTO stats(damage, damage_coef) VALUES (674, 0.221) RETURNING id),
      item_update AS (INSERT INTO updates(version, type, item) VALUES (1.0, 'Weapon', 'Primordial Jade Winged-Spear') RETURNING id)
 INSERT INTO weapons(name, type, stats, update)
-SELECT 'Primordial Jade Winged-Spear', 'Spear', (SELECT id FROM stats), (SELECT id FROM item_update)
-FROM stats, item_update;
+SELECT 'Primordial Jade Winged-Spear', 'Spear', (SELECT id FROM weapon_stats), (SELECT id FROM item_update)
+FROM weapon_stats, item_update;
 
 WITH weapon_stats AS (INSERT INTO stats(damage, hp_coef) VALUES (674, 0.368) RETURNING id),
      item_update AS (INSERT INTO updates(version, type, item) VALUES (1.0, 'Weapon', 'Skyward Spine') RETURNING id)
 INSERT INTO weapons(name, type, stats, update)
-SELECT 'Skyward Spine', 'Spear', (SELECT id FROM stats), (SELECT id FROM item_update)
-FROM stats, item_update;
+SELECT 'Skyward Spine', 'Spear', (SELECT id FROM weapon_stats), (SELECT id FROM item_update)
+FROM weapon_stats, item_update;
 
 WITH weapon_stats AS (INSERT INTO stats(damage, damage_coef) VALUES (608, 0.662) RETURNING id),
      item_update AS (INSERT INTO updates(version, type, item) VALUES (1.3, 'Weapon', 'Staff of Homa') RETURNING id)
 INSERT INTO weapons(name, type, stats, update)
-SELECT 'Staff of Homa', 'Spear', (SELECT id FROM stats), (SELECT id FROM item_update)
-FROM stats, item_update;
+SELECT 'Staff of Homa', 'Spear', (SELECT id FROM weapon_stats), (SELECT id FROM item_update)
+FROM weapon_stats, item_update;
 
 --one-handed
 WITH weapon_stats AS (INSERT INTO stats(damage, damage_coef) VALUES (674, 0.413) RETURNING id),
      item_update AS (INSERT INTO updates(version, type, item) VALUES (1.0, 'Weapon', 'Aquila Favonia') RETURNING id)
 INSERT INTO weapons(name, type, stats, update)
-SELECT 'Aquila Favonia', 'One handed', (SELECT id FROM stats), (SELECT id FROM item_update)
-FROM stats, item_update;
+SELECT 'Aquila Favonia', 'One handed', (SELECT id FROM weapon_stats), (SELECT id FROM item_update)
+FROM weapon_stats, item_update;
 
 WITH weapon_stats AS (INSERT INTO stats(damage, hp) VALUES (608, 198) RETURNING id),
      item_update AS (INSERT INTO updates(version, type, item) VALUES (1.6, 'Weapon', 'Freedom-Sworn') RETURNING id)
 INSERT INTO weapons(name, type, stats, update)
-SELECT 'Freedom-Sworn', 'One handed', (SELECT id FROM stats), (SELECT id FROM item_update)
-FROM stats, item_update;
+SELECT 'Freedom-Sworn', 'One handed', (SELECT id FROM weapon_stats), (SELECT id FROM item_update)
+FROM weapon_stats, item_update;
 
 WITH weapon_stats AS (INSERT INTO stats(damage, damage_coef) VALUES (608, 0.331) RETURNING id),
      item_update AS (INSERT INTO updates(version, type, item) VALUES (2.6, 'Weapon', 'Haran Geppaku Futsu') RETURNING id)
 INSERT INTO weapons(name, type, stats, update)
-SELECT 'Haran Geppaku Futsu', 'One handed', (SELECT id FROM stats), (SELECT id FROM item_update)
-FROM stats, item_update;
+SELECT 'Haran Geppaku Futsu', 'One handed', (SELECT id FROM weapon_stats), (SELECT id FROM item_update)
+FROM weapon_stats, item_update;
 
 WITH weapon_stats AS (INSERT INTO stats(damage, hp_coef) VALUES (542, 0.662) RETURNING id),
      item_update AS (INSERT INTO updates(version, type, item) VALUES (3.1, 'Weapon', 'Key of Khaj-Nisut') RETURNING id)
 INSERT INTO weapons(name, type, stats, update)
-SELECT 'Key of Khaj-Nisut', 'One handed', (SELECT id FROM stats), (SELECT id FROM item_update)
-FROM stats, item_update;
+SELECT 'Key of Khaj-Nisut', 'One handed', (SELECT id FROM weapon_stats), (SELECT id FROM item_update)
+FROM weapon_stats, item_update;
 
 WITH weapon_stats AS (INSERT INTO stats(damage, damage_coef) VALUES (542, 0.882) RETURNING id),
      item_update AS (INSERT INTO updates(version, type, item) VALUES (3.4, 'Weapon', 'Light of Foliar Incision') RETURNING id)
 INSERT INTO weapons(name, type, stats, update)
-SELECT 'Light of Foliar Incision', 'One handed', (SELECT id FROM stats), (SELECT id FROM item_update)
-FROM stats, item_update;
+SELECT 'Light of Foliar Incision', 'One handed', (SELECT id FROM weapon_stats), (SELECT id FROM item_update)
+FROM weapon_stats, item_update;
 
 --two-handed 
 
 WITH weapon_stats AS (INSERT INTO stats(damage, hp_coef) VALUES (608, 0.331) RETURNING id),
      item_update AS (INSERT INTO updates(version, type, item) VALUES (3.5, 'Weapon', 'Beacon of the Reed Sea') RETURNING id)
 INSERT INTO weapons(name, type, stats, update)
-SELECT 'Beacon of the Reed Sea', 'Two handed', (SELECT id FROM stats), (SELECT id FROM item_update)
-FROM stats, item_update;
+SELECT 'Beacon of the Reed Sea', 'Two handed', (SELECT id FROM weapon_stats), (SELECT id FROM item_update)
+FROM weapon_stats, item_update;
 
 WITH weapon_stats AS (INSERT INTO stats(damage, damage_coef) VALUES (542, 0.882) RETURNING id),
      item_update AS (INSERT INTO updates(version, type, item) VALUES (2.3, 'Weapon', 'Redhorn Stonethresher') RETURNING id)
 INSERT INTO weapons(name, type, stats, update)
-SELECT 'Redhorn Stonethresher', 'Two handed', (SELECT id FROM stats), (SELECT id FROM item_update)
-FROM stats, item_update;
+SELECT 'Redhorn Stonethresher', 'Two handed', (SELECT id FROM weapon_stats), (SELECT id FROM item_update)
+FROM weapon_stats, item_update;
 
 WITH weapon_stats AS (INSERT INTO stats(damage, hp_coef) VALUES (674, 0.368) RETURNING id),
      item_update AS (INSERT INTO updates(version, type, item) VALUES (1.0, 'Weapon', 'Skyward Pride') RETURNING id)
 INSERT INTO weapons(name, type, stats, update)
-SELECT 'Skyward Pride', 'Two handed', (SELECT id FROM stats), (SELECT id FROM item_update)
-FROM stats, item_update;
+SELECT 'Skyward Pride', 'Two handed', (SELECT id FROM weapon_stats), (SELECT id FROM item_update)
+FROM weapon_stats, item_update;
 
 WITH weapon_stats AS (INSERT INTO stats(damage, damage_coef) VALUES (741, 0.207) RETURNING id),
      item_update AS (INSERT INTO updates(version, type, item) VALUES (1.5, 'Weapon', 'Song of Broken Pines') RETURNING id)
 INSERT INTO weapons(name, type, stats, update)
-SELECT 'Song of Broken Pines', 'Two handed', (SELECT id FROM stats), (SELECT id FROM item_update)
-FROM stats, item_update;
+SELECT 'Song of Broken Pines', 'Two handed', (SELECT id FROM weapon_stats), (SELECT id FROM item_update)
+FROM weapon_stats, item_update;
 
 WITH weapon_stats AS (INSERT INTO stats(damage, damage_coef) VALUES (608, 0.496) RETURNING id),
      item_update AS (INSERT INTO updates(version, type, item) VALUES (1.1, 'Weapon', 'The Unforged') RETURNING id)
 INSERT INTO weapons(name, type, stats, update)
-SELECT 'The Unforged', 'Two handed', (SELECT id FROM stats), (SELECT id FROM item_update)
-FROM stats, item_update;
+SELECT 'The Unforged', 'Two handed', (SELECT id FROM weapon_stats), (SELECT id FROM item_update)
+FROM weapon_stats, item_update;
 -- filling artifacts (+ their stats, + their updates)
 -- healing set
 WITH set_stats AS (INSERT INTO stats(heal_coef, hp_coef) VALUES (0.25, 0.15) RETURNING id),
