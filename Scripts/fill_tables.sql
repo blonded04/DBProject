@@ -437,6 +437,21 @@ INSERT INTO characters(name, weapon_type, country, base_stats, update, element, 
 SELECT 'Yaoyao', 'Spear', 'Liyue', (SELECT id FROM character_stats), (SELECT id FROM character_update), 'Dendro', (SELECT name FROM character_skill_elemental), (SELECT name FROM character_skill_ultimate)
 FROM character_skill_ultimate, character_skill_elemental, character_update, character_stats;
 
+WITH character_stats AS (INSERT INTO stats(damage, hp) VALUES (15, 802) RETURNING id),
+     character_update AS (INSERT INTO updates(version, type, item) VALUES (2.3, 'Character', 'Shadows Amidst Snowstorms') RETURNING id),
+     character_skill_elemental AS (INSERT INTO skills(name, type, base_damage, base_heal, cooldown) VALUES ('Inuzaka All-Round Defense', 'Elemental', 0.0, 0.0, 10.0) RETURNING name),
+     character_skill_ultimate AS (INSERT INTO skills(name, type, base_damage, base_heal, cooldown) VALUES ('Juuga: Forward Unto Victory', 'Ultimate', 0.0, 0.0, 20.0) RETURNING name)
+INSERT INTO characters(name, weapon_type, country, base_stats, update, element, elemental_skill, ultimate_skill)
+SELECT 'Gorou', 'Bow', 'Inazuma', (SELECT id FROM character_stats), (SELECT id FROM character_update), 'Geo', (SELECT name FROM character_skill_elemental), (SELECT name FROM character_skill_ultimate)
+FROM character_skill_ultimate, character_skill_elemental, character_update, character_stats;
+
+WITH character_stats AS (INSERT INTO stats(damage, hp) VALUES (19, 1143) RETURNING id),
+     character_update AS (INSERT INTO updates(version, type, item) VALUES (1.1, 'Character', 'A New Star Approaches') RETURNING id),
+     character_skill_elemental AS (INSERT INTO skills(name, type, base_damage, base_heal, cooldown) VALUES ('Dominus Lapidis', 'Elemental', 0.0, 0.0, 12.0) RETURNING name),
+     character_skill_ultimate AS (INSERT INTO skills(name, type, base_damage, base_heal, cooldown) VALUES ('Planet Befall', 'Ultimate', 1138.0, 0.0, 12.0) RETURNING name)
+INSERT INTO characters(name, weapon_type, country, base_stats, update, element, elemental_skill, ultimate_skill)
+SELECT 'Zhongli', 'Spear', 'Liyue', (SELECT id FROM character_stats), (SELECT id FROM character_update), 'Geo', (SELECT name FROM character_skill_elemental), (SELECT name FROM character_skill_ultimate)
+FROM character_skill_ultimate, character_skill_elemental, character_update, character_stats;
 
 -- filling units
 
