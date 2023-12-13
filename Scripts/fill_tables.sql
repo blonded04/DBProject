@@ -453,6 +453,14 @@ INSERT INTO characters(name, weapon_type, country, base_stats, update, element, 
 SELECT 'Zhongli', 'Spear', 'Liyue', (SELECT id FROM character_stats), (SELECT id FROM character_update), 'Geo', (SELECT name FROM character_skill_elemental), (SELECT name FROM character_skill_ultimate)
 FROM character_skill_ultimate, character_skill_elemental, character_update, character_stats;
 
+WITH character_stats AS (INSERT INTO stats(damage, hp) VALUES (20, 819) RETURNING id),
+     character_update AS (INSERT INTO updates(version, type, item) VALUES (1.0, 'Character', 'Welcome To Teyvat') RETURNING id),
+     character_skill_elemental AS (INSERT INTO skills(name, type, base_damage, base_heal, cooldown) VALUES ('Skyward Sonnet', 'Elemental', 586.5, 0.0, 6.0) RETURNING name),
+     character_skill_ultimate AS (INSERT INTO skills(name, type, base_damage, base_heal, cooldown) VALUES ('Winds Grand Ode', 'Ultimate', 1480.3, 0.0, 15.0) RETURNING name)
+INSERT INTO characters(name, weapon_type, country, base_stats, update, element, elemental_skill, ultimate_skill)
+SELECT 'Venti', 'Bow', 'Mondstadt', (SELECT id FROM character_stats), (SELECT id FROM character_update), 'Anemo', (SELECT name FROM character_skill_elemental), (SELECT name FROM character_skill_ultimate)
+FROM character_skill_ultimate, character_skill_elemental, character_update, character_stats;
+
 -- filling units
 
 -- filling players
