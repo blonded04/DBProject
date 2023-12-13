@@ -421,6 +421,21 @@ INSERT INTO characters(name, weapon_type, country, base_stats, update, element, 
 SELECT 'Raiden Shogun', 'Spear', 'Inazuma', (SELECT id FROM character_stats), (SELECT id FROM character_update), 'Electro', (SELECT name FROM character_skill_elemental), (SELECT name FROM character_skill_ultimate)
 FROM character_skill_ultimate, character_skill_elemental, character_update, character_stats;
 
+WITH character_stats AS (INSERT INTO stats(damage, hp) VALUES (14, 1039) RETURNING id),
+     character_update AS (INSERT INTO updates(version, type, item) VALUES (3.6, 'Character', 'A Parade of Providence') RETURNING id),
+     character_skill_elemental AS (INSERT INTO skills(name, type, base_damage, base_heal, cooldown) VALUES ('Universal Diagnosis', 'Elemental', 168.3, 2118.72, 10.0) RETURNING name),
+     character_skill_ultimate AS (INSERT INTO skills(name, type, base_damage, base_heal, cooldown) VALUES ('Holistic Revivification', 'Ultimate', 206.26, 1588.87, 20.0) RETURNING name)
+INSERT INTO characters(name, weapon_type, country, base_stats, update, element, elemental_skill, ultimate_skill)
+SELECT 'Baizhu', 'Catalyst', 'Liyue', (SELECT id FROM character_stats), (SELECT id FROM character_update), 'Dendro', (SELECT name FROM character_skill_elemental), (SELECT name FROM character_skill_ultimate)
+FROM character_skill_ultimate, character_skill_elemental, character_update, character_stats;
+
+WITH character_stats AS (INSERT INTO stats(damage, hp) VALUES (17, 1030) RETURNING id),
+     character_update AS (INSERT INTO updates(version, type, item) VALUES (3.4, 'Character', 'The Exquisite Night Chimes') RETURNING id),
+     character_skill_elemental AS (INSERT INTO skills(name, type, base_damage, base_heal, cooldown) VALUES ('Raphanus Sky Cluster', 'Elemental', 63.58, 454.002, 15.0) RETURNING name),
+     character_skill_ultimate AS (INSERT INTO skills(name, type, base_damage, base_heal, cooldown) VALUES ('Moonjade Descent', 'Ultimate', 406.86, 534.11, 20.0) RETURNING name)
+INSERT INTO characters(name, weapon_type, country, base_stats, update, element, elemental_skill, ultimate_skill)
+SELECT 'Yaoyao', 'Spear', 'Liyue', (SELECT id FROM character_stats), (SELECT id FROM character_update), 'Dendro', (SELECT name FROM character_skill_elemental), (SELECT name FROM character_skill_ultimate)
+FROM character_skill_ultimate, character_skill_elemental, character_update, character_stats;
 
 
 -- filling units
