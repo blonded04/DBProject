@@ -15,122 +15,122 @@ CREATE TYPE t_item AS ENUM ('Character', 'Artifact', 'Weapon');
 -- tables creation
 -- elements
 CREATE TABLE elements(
-    name t_element PRIMARY KEY,
-    reactions BOOLEAN[8] DEFAULT '{false, false, false, false, false, false, false, false}'::BOOLEAN[]
+    _name t_element PRIMARY KEY,
+    _reactions BOOLEAN[8] DEFAULT '{false, false, false, false, false, false, false, false}'::BOOLEAN[]
 );
 
 -- countries
 CREATE TABLE countries(
-    name TEXT PRIMARY KEY,
-    element t_element NOT NULL,
-    archont TEXT DEFAULT ''
+    _name TEXT PRIMARY KEY,
+    _element t_element NOT NULL,
+    _archont TEXT DEFAULT ''
 );
 
 -- updates
-CREATE TABLE updates (
-    id SERIAL PRIMARY KEY,
-    version FLOAT NOT NULL,
-    type t_item NOT NULL,
-    item TEXT NOT NULL
+CREATE TABLE updates(
+    _id SERIAL PRIMARY KEY,
+    _version FLOAT NOT NULL,
+    _type t_item NOT NULL,
+    _item TEXT NOT NULL
 );
 
 -- stats
 CREATE TABLE stats(
-    id SERIAL PRIMARY KEY,
-    damage INT DEFAULT 0,
-    damage_coef FLOAT DEFAULT 0,
-    hp INT DEFAULT 0,
-    hp_coef FLOAT DEFAULT 0,
-    heal_coef FLOAT DEFAULT 0,
-    elemental_coefs FLOAT[8] DEFAULT '{0, 0, 0, 0, 0, 0, 0, 0}'::FLOAT[]
+    _id SERIAL PRIMARY KEY,
+    _damage INT DEFAULT 0,
+    _damage_coef FLOAT DEFAULT 0,
+    _hp INT DEFAULT 0,
+    _hp_coef FLOAT DEFAULT 0,
+    _heal_coef FLOAT DEFAULT 0,
+    _elemental_coefs FLOAT[8] DEFAULT '{0, 0, 0, 0, 0, 0, 0, 0}'::FLOAT[]
 );
 
 -- artifacts
-CREATE TABLE artifacts (
-    name TEXT PRIMARY KEY,
-    set_name TEXT NOT NULL,
-    type t_artifact NOT NULL,
-    update INT references updates(id),
-    stats INT references stats(id),
-    set_bonus_stats INT references stats(id),
-    UNIQUE (set_name, type)
+CREATE TABLE artifacts(
+    _name TEXT PRIMARY KEY,
+    _set_name TEXT NOT NULL,
+    _type t_artifact NOT NULL,
+    _update INT references updates(_id),
+    _stats INT references stats(_id),
+    _set_bonus_stats INT references stats(_id),
+    UNIQUE (_set_name, _type)
 );
 
 -- weapons
-CREATE TABLE weapons (
-    name TEXT PRIMARY KEY,
-    type t_weapon NOT NULL,
-    stats INT references stats(id),
-    update INT references updates(id)
+CREATE TABLE weapons(
+    _name TEXT PRIMARY KEY,
+    _type t_weapon NOT NULL,
+    _stats INT references stats(_id),
+    _update INT references updates(_id)
 );
 
 -- skills
 CREATE TABLE skills(
-    name TEXT PRIMARY KEY,
-    type t_skill NOT NULL,
-    base_damage INT DEFAULT 0,
-    base_heal FLOAT DEFAULT 0,
-    cooldown FLOAT DEFAULT 5.5
+    _name TEXT PRIMARY KEY,
+    _type t_skill NOT NULL,
+    _base_damage INT DEFAULT 0,
+    _base_heal FLOAT DEFAULT 0,
+    _cooldown FLOAT DEFAULT 5.5
 );
 
 -- characters
 CREATE TABLE characters(
-    name TEXT PRIMARY KEY,
-    weapon_type t_weapon NOT NULL,
-    country TEXT references countries(name),
-    base_stats INT references stats(id),
-    update INT references updates(id),
-    element t_element references elements(name),
-    elemental_skill TEXT references skills(name),
-    ultimate_skill TEXT references skills(name)
+    _name TEXT PRIMARY KEY,
+    _weapon_type t_weapon NOT NULL,
+    _country TEXT references countries(_name),
+    _base_stats INT references stats(_id),
+    _update INT references updates(_id),
+    _element t_element references elements(_name),
+    _elemental_skill TEXT references skills(_name),
+    _ultimate_skill TEXT references skills(_name)
 );
 
 -- units
 CREATE TABLE units(
-    id SERIAL PRIMARY KEY,
-    character TEXT REFERENCES characters(name),
-    weapon TEXT REFERENCES weapons(name),
-    flower_artifact TEXT REFERENCES artifacts(name),
-    clock_artifact TEXT REFERENCES artifacts(name),
-    hat_artifact TEXT REFERENCES artifacts(name),
-    total_hp INT DEFAULT 1000,
-    additional_damage INT DEFAULT 0,
-    boost_damage FLOAT DEFAULT 1,
-    boost_elemental FLOAT[8] DEFAULT '{1, 1, 1, 1, 1, 1, 1, 1}'::FLOAT[],
-    boost_heal FLOAT DEFAULT 1
+    _id SERIAL PRIMARY KEY,
+    _character TEXT REFERENCES characters(_name),
+    _weapon TEXT REFERENCES weapons(_name),
+    _flower_artifact TEXT REFERENCES artifacts(_name),
+    _clock_artifact TEXT REFERENCES artifacts(_name),
+    _hat_artifact TEXT REFERENCES artifacts(_name),
+    _total_hp INT DEFAULT 1000,
+    _additional_damage INT DEFAULT 0,
+    _boost_damage FLOAT DEFAULT 1,
+    _boost_elemental FLOAT[8] DEFAULT '{1, 1, 1, 1, 1, 1, 1, 1}'::FLOAT[],
+    _boost_heal FLOAT DEFAULT 1
 );
 
 -- players
 CREATE TABLE players(
-    id SERIAL PRIMARY KEY,
-    unit_1 INT REFERENCES units(id),
-    unit_2 INT REFERENCES units(id),
-    unit_3 INT REFERENCES units(id),
-    unit_4 INT REFERENCES units(id),
-    elemental_bonus FLOAT[8] DEFAULT '{0, 0, 0, 0, 0, 0, 0, 0}'::FLOAT[]
+    _id SERIAL PRIMARY KEY,
+    _unit_1 INT REFERENCES units(_id),
+    _unit_2 INT REFERENCES units(_id),
+    _unit_3 INT REFERENCES units(_id),
+    _unit_4 INT REFERENCES units(_id),
+    _elemental_bonus FLOAT[8] DEFAULT '{0, 0, 0, 0, 0, 0, 0, 0}'::FLOAT[]
 );
 
 -- adding array constraints
-ALTER TABLE stats ADD CHECK (array_ndims(elemental_coefs) = 1 AND array_length(elemental_coefs, 1) = 8);
-ALTER TABLE players ADD CHECK (array_ndims(elemental_bonus) = 1 AND array_length(elemental_bonus, 1) = 8);
-ALTER TABLE units ADD CHECK (array_ndims(boost_elemental) = 1 AND array_length(boost_elemental, 1) = 8);
-ALTER TABLE elements ADD CHECK (array_ndims(reactions) = 1 AND array_length(reactions, 1) = 8);
+ALTER TABLE stats ADD CHECK (array_ndims(_elemental_coefs) = 1 AND array_length(_elemental_coefs, 1) = 8);
+ALTER TABLE players ADD CHECK (array_ndims(_elemental_bonus) = 1 AND array_length(_elemental_bonus, 1) = 8);
+ALTER TABLE units ADD CHECK (array_ndims(_boost_elemental) = 1 AND array_length(_boost_elemental, 1) = 8);
+ALTER TABLE elements ADD CHECK (array_ndims(_reactions) = 1 AND array_length(_reactions, 1) = 8);
 
-CREATE OR REPLACE FUNCTION weapon_check("character" TEXT, weapon TEXT) RETURNS BOOLEAN AS $$ 
+CREATE OR REPLACE FUNCTION weapon_check(_character TEXT, _weapon TEXT) RETURNS BOOLEAN AS $$ 
 BEGIN
-RETURN (SELECT weapon_type FROM "characters" WHERE "name" = "character") = (SELECT "type" FROM weapons WHERE "name" = weapon);
+RETURN (SELECT _weapon_type FROM "characters" WHERE _name = _character) = (SELECT _type FROM weapons WHERE _name = _weapon);
 END;
 $$ LANGUAGE plpgsql;
 
-ALTER TABLE units ADD CHECK (weapon_check("character", weapon));
+ALTER TABLE units ADD CHECK (weapon_check(_character, _weapon));
 
-CREATE OR REPLACE FUNCTION artifact_check(artifact TEXT, "type" TEXT) RETURNS BOOLEAN AS $$ 
+CREATE OR REPLACE FUNCTION artifact_check(_artifact TEXT, _type TEXT) RETURNS BOOLEAN AS $$ 
 BEGIN
-RETURN ((SELECT "type" FROM "artifacts" WHERE "name" = artifact) = "type");
+RETURN ((SELECT _type FROM artifacts WHERE _name_ = _artifact) = _type);
 END;
 $$ LANGUAGE plpgsql;
 
-ALTER TABLE units ADD CHECK (artifact_check(flower_artifact, 'Flower'));
-ALTER TABLE units ADD CHECK (artifact_check(clock_artifact, 'Clock'));
-ALTER TABLE units ADD CHECK (artifact_check(hat_artifact, 'Hat'));
+ALTER TABLE units ADD CHECK (artifact_check(_flower_artifact, 'Flower'));
+ALTER TABLE units ADD CHECK (artifact_check(_clock_artifact, 'Clock'));
+ALTER TABLE units ADD CHECK (artifact_check(_hat_artifact, 'Hat'));
 
