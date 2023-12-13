@@ -501,6 +501,22 @@ INSERT INTO characters(_name, _weapon_type, _country, _base_stats, _update, _ele
 SELECT 'Freminet', 'Two handed', 'Fontaine', (SELECT _id FROM character_stats), (SELECT _id FROM character_update), 'Cryo', (SELECT _name FROM character_skill_elemental), (SELECT _name FROM character_skill_ultimate)
 FROM character_skill_ultimate, character_skill_elemental, character_update, character_stats;
 
+WITH character_stats AS (INSERT INTO stats(damage, hp) VALUES (19, 1002) RETURNING id),
+     character_update AS (INSERT INTO updates(version, type, item) VALUES (1.0, 'Character', 'Welcome To Teyvat') RETURNING id),
+     character_skill_elemental AS (INSERT INTO skills(name, type, base_damage, base_heal, cooldown) VALUES ('Claw and Thunder', 'Elemental', 126.73, 0, 10.0) RETURNING name),
+     character_skill_ultimate AS (INSERT INTO skills(name, type, base_damage, base_heal, cooldown) VALUES ('Lightning Fang', 'Ultimate', 261.68, 0, 20.0) RETURNING name)
+INSERT INTO characters(name, weapon_type, country, base_stats, update, element, elemental_skill, ultimate_skill)
+SELECT 'Razor', 'Two handed', 'Mondstadt', (SELECT id FROM character_stats), (SELECT id FROM character_update), 'Electro', (SELECT name FROM character_skill_elemental), (SELECT name FROM character_skill_ultimate)
+FROM character_skill_ultimate, character_skill_elemental, character_update, character_stats;
+
+WITH character_stats AS (INSERT INTO stats(damage, hp) VALUES (16, 866) RETURNING id),
+     character_update AS (INSERT INTO updates(version, type, item) VALUES (2.2, 'Character', 'Into the Perilous Labyrinth of Fog') RETURNING id),
+     character_skill_elemental AS (INSERT INTO skills(name, type, base_damage, base_heal, cooldown) VALUES ('Blazing Blessing', 'Elemental', 329.2, 0, 15.0) RETURNING name),
+     character_skill_ultimate AS (INSERT INTO skills(name, type, base_damage, base_heal, cooldown) VALUES ('Crimson Ooyoroi', 'Ultimate', 415.21, 0, 20.0) RETURNING name)
+INSERT INTO characters(name, weapon_type, country, base_stats, update, element, elemental_skill, ultimate_skill)
+SELECT 'Thoma', 'Spear', 'Inazuma', (SELECT id FROM character_stats), (SELECT id FROM character_update), 'Pyro', (SELECT name FROM character_skill_elemental), (SELECT name FROM character_skill_ultimate)
+FROM character_skill_ultimate, character_skill_elemental, character_update, character_stats;
+
 -- filling units
 
 -- filling players
