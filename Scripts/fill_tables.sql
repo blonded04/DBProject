@@ -422,6 +422,7 @@ SELECT 'Raiden Shogun', 'Spear', 'Inazuma', (SELECT id FROM character_stats), (S
 FROM character_skill_ultimate, character_skill_elemental, character_update, character_stats;
 
 
+
 -- filling units
 
 -- filling players
