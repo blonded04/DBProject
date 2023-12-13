@@ -405,6 +405,14 @@ FROM item_update, item_stats, set_stats;
 
 
 -- filling characters (+ their stats, + their updates, + their skills)
+WITH character_stats AS (INSERT INTO stats(damage, hp) VALUES (26, 807) RETURNING id),
+     character_update AS (INSERT INTO updates(version, type, item) VALUES (2.5, 'Character', 'When the Sakura Bloom') RETURNING id),
+     character_skill_elemental AS (INSERT INTO skills(name, type, base_damage, base_heal, cooldown) VALUES ('Yakan Evocation: Sesshou Sakura', 'Elemental', 128.93, 0.0, 4.0) RETURNING name),
+     character_skill_ultimate AS (INSERT INTO skills(name, type, base_damage, base_heal, cooldown) VALUES ('Great Secret Art: Tenko Kenshin', 'Ultimate', 552.5, 0.0, 22.0) RETURNING name)
+INSERT INTO characters(name, weapon_type, country, base_stats, update, element, elemental_skill, ultimate_skill)
+SELECT 'Yae Miko', 'Catalyst', 'Inazuma', (SELECT id FROM character_stats), (SELECT id FROM character_update), 'Electro', (SELECT name FROM character_skill_elemental), (SELECT name FROM character_skill_ultimate)
+FROM character_skill_ultimate, character_skill_elemental, character_update, character_stats;
+
 
 -- filling units
 
