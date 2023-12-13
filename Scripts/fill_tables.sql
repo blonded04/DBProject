@@ -461,6 +461,46 @@ INSERT INTO characters(name, weapon_type, country, base_stats, update, element, 
 SELECT 'Venti', 'Bow', 'Mondstadt', (SELECT id FROM character_stats), (SELECT id FROM character_update), 'Anemo', (SELECT name FROM character_skill_elemental), (SELECT name FROM character_skill_ultimate)
 FROM character_skill_ultimate, character_skill_elemental, character_update, character_stats;
 
+WITH character_stats AS (INSERT INTO stats(damage, hp) VALUES (18, 1048) RETURNING id),
+     character_update AS (INSERT INTO updates(version, type, item) VALUES (2.1, 'Character', 'Floating World Under the Moonlight') RETURNING id),
+     character_skill_elemental AS (INSERT INTO skills(name, type, base_damage, base_heal, cooldown) VALUES ('Kurages Oath', 'Elemental', 232.03, 1165.29, 20.0) RETURNING name),
+     character_skill_ultimate AS (INSERT INTO skills(name, type, base_damage, base_heal, cooldown) VALUES ('Nereids Ascension', 'Ultimate', 0.0, 211.87, 18.0) RETURNING name)
+INSERT INTO characters(name, weapon_type, country, base_stats, update, element, elemental_skill, ultimate_skill)
+SELECT 'Sangonomiya Kokomi', 'Catalyst', 'Inazuma', (SELECT id FROM character_stats), (SELECT id FROM character_update), 'Hydro', (SELECT name FROM character_skill_elemental), (SELECT name FROM character_skill_ultimate)
+FROM character_skill_ultimate, character_skill_elemental, character_update, character_stats;
+
+WITH character_stats AS (INSERT INTO stats(damage, hp) VALUES (18, 1124) RETURNING id),
+     character_update AS (INSERT INTO updates(version, type, item) VALUES (2.7, 'Character', 'Hidden Dreams in the Depths') RETURNING id),
+     character_skill_elemental AS (INSERT INTO skills(name, type, base_damage, base_heal, cooldown) VALUES ('Lingering Lifeline', 'Elemental', 50.88, 0, 10.0) RETURNING name),
+     character_skill_ultimate AS (INSERT INTO skills(name, type, base_damage, base_heal, cooldown) VALUES ('Depth-Clarion Dice', 'Ultimate', 0.0, 0, 18.0) RETURNING name)
+INSERT INTO characters(name, weapon_type, country, base_stats, update, element, elemental_skill, ultimate_skill)
+SELECT 'Yelan', 'Bow', 'Liyue', (SELECT id FROM character_stats), (SELECT id FROM character_update), 'Hydro', (SELECT name FROM character_skill_elemental), (SELECT name FROM character_skill_ultimate)
+FROM character_skill_ultimate, character_skill_elemental, character_update, character_stats;
+
+WITH character_stats AS (INSERT INTO stats(damage, hp) VALUES (17, 1182) RETURNING id),
+     character_update AS (INSERT INTO updates(version, type, item) VALUES (3.1, 'Character', 'King Deshret and the Three Magi') RETURNING id),
+     character_skill_elemental AS (INSERT INTO skills(name, type, base_damage, base_heal, cooldown) VALUES ('Dance of Haftkarsvar', 'Elemental', 0, 0, 18.0) RETURNING name),
+     character_skill_ultimate AS (INSERT INTO skills(name, type, base_damage, base_heal, cooldown) VALUES ('Dance of Abzendegi: Distant Dreams, Listening Spring', 'Ultimate', 89.17, 0, 18.0) RETURNING name)
+INSERT INTO characters(name, weapon_type, country, base_stats, update, element, elemental_skill, ultimate_skill)
+SELECT 'Nilou', 'One handed', 'Sumeru', (SELECT id FROM character_stats), (SELECT id FROM character_update), 'Hydro', (SELECT name FROM character_skill_elemental), (SELECT name FROM character_skill_ultimate)
+FROM character_skill_ultimate, character_skill_elemental, character_update, character_stats;
+
+WITH character_stats AS (INSERT INTO stats(damage, hp) VALUES (24, 857) RETURNING id),
+     character_update AS (INSERT INTO updates(version, type, item) VALUES (4.0, 'Character', 'As Light Rain Falls Without Reason') RETURNING id),
+     character_skill_elemental AS (INSERT INTO skills(name, type, base_damage, base_heal, cooldown) VALUES ('Bewildering Lights', 'Elemental', 395.96, 0, 15.0) RETURNING name),
+     character_skill_ultimate AS (INSERT INTO skills(name, type, base_damage, base_heal, cooldown) VALUES ('Wondrous Trick: Miracle Parade', 'Ultimate', 1207.0, 0, 15.0) RETURNING name)
+INSERT INTO characters(name, weapon_type, country, base_stats, update, element, elemental_skill, ultimate_skill)
+SELECT 'Lyney', 'Bow', 'Fontaine', (SELECT id FROM character_stats), (SELECT id FROM character_update), 'Pyro', (SELECT name FROM character_skill_elemental), (SELECT name FROM character_skill_ultimate)
+FROM character_skill_ultimate, character_skill_elemental, character_update, character_stats;
+
+WITH character_stats AS (INSERT INTO stats(damage, hp) VALUES (21, 1012) RETURNING id),
+     character_update AS (INSERT INTO updates(version, type, item) VALUES (4.0, 'Character', 'As Light Rain Falls Without Reason') RETURNING id),
+     character_skill_elemental AS (INSERT INTO skills(name, type, base_damage, base_heal, cooldown) VALUES ('Pressurized Floe', 'Elemental', 616.22, 0, 10.0) RETURNING name),
+     character_skill_ultimate AS (INSERT INTO skills(name, type, base_damage, base_heal, cooldown) VALUES ('Shadowhunters Ambush', 'Ultimate', 573.12, 0, 15.0) RETURNING name)
+INSERT INTO characters(name, weapon_type, country, base_stats, update, element, elemental_skill, ultimate_skill)
+SELECT 'Freminet', 'Two handed', 'Fontaine', (SELECT id FROM character_stats), (SELECT id FROM character_update), 'Cryo', (SELECT name FROM character_skill_elemental), (SELECT name FROM character_skill_ultimate)
+FROM character_skill_ultimate, character_skill_elemental, character_update, character_stats;
+
 -- filling units
 
 -- filling players
