@@ -413,6 +413,14 @@ INSERT INTO characters(name, weapon_type, country, base_stats, update, element, 
 SELECT 'Yae Miko', 'Catalyst', 'Inazuma', (SELECT id FROM character_stats), (SELECT id FROM character_update), 'Electro', (SELECT name FROM character_skill_elemental), (SELECT name FROM character_skill_ultimate)
 FROM character_skill_ultimate, character_skill_elemental, character_update, character_stats;
 
+WITH character_stats AS (INSERT INTO stats(damage, hp) VALUES (26, 1004) RETURNING id),
+     character_update AS (INSERT INTO updates(version, type, item) VALUES (2.1, 'Character', 'Floating World Under the Moonlight') RETURNING id),
+     character_skill_elemental AS (INSERT INTO skills(name, type, base_damage, base_heal, cooldown) VALUES ('Transcendence: Baleful Omen', 'Elemental', 263.7, 0.0, 10.0) RETURNING name),
+     character_skill_ultimate AS (INSERT INTO skills(name, type, base_damage, base_heal, cooldown) VALUES ('Secret Art: Musou Shinsetsu', 'Ultimate', 902, 0.0, 18.0) RETURNING name)
+INSERT INTO characters(name, weapon_type, country, base_stats, update, element, elemental_skill, ultimate_skill)
+SELECT 'Raiden Shogun', 'Spear', 'Inazuma', (SELECT id FROM character_stats), (SELECT id FROM character_update), 'Electro', (SELECT name FROM character_skill_elemental), (SELECT name FROM character_skill_ultimate)
+FROM character_skill_ultimate, character_skill_elemental, character_update, character_stats;
+
 
 -- filling units
 
