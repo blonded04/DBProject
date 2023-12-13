@@ -503,9 +503,9 @@ FROM character_skill_ultimate, character_skill_elemental, character_update, char
 
 WITH character_stats AS (INSERT INTO stats(_damage, _hp) VALUES (19, 1002) RETURNING _id),
      character_update AS (INSERT INTO updates(_version, _type, _item) VALUES (1.0, 'Character', 'Welcome To Teyvat') RETURNING _id),
-     character_skill_elemental AS (INSERT INTO skills(name, type, base_damage, base_heal, cooldown) VALUES ('Claw and Thunder', 'Elemental', 126.73, 0, 10.0) RETURNING _name),
-     character_skill_ultimate AS (INSERT INTO skills(name, type, base_damage, base_heal, cooldown) VALUES ('Lightning Fang', 'Ultimate', 261.68, 0, 20.0) RETURNING _name)
-INSERT INTO characters(name, weapon_type, country, base_stats, update, element, elemental_skill, ultimate_skill)
+     character_skill_elemental AS (INSERT INTO skills(_name, _type, _base_damage, _base_heal, _cooldown) VALUES ('Claw and Thunder', 'Elemental', 126.73, 0, 10.0) RETURNING _name),
+     character_skill_ultimate AS (INSERT INTO skills(_name, _type, _base_damage, _base_heal, _cooldown) VALUES ('Lightning Fang', 'Ultimate', 261.68, 0, 20.0) RETURNING _name)
+INSERT INTO characters(_name, _weapon_type, _country, _base_stats, _update, _element, _elemental_skill, _ultimate_skill)
 SELECT 'Razor', 'Two handed', 'Mondstadt', (SELECT _id FROM character_stats), (SELECT _id FROM character_update), 'Electro', (SELECT _name FROM character_skill_elemental), (SELECT _name FROM character_skill_ultimate)
 FROM character_skill_ultimate, character_skill_elemental, character_update, character_stats;
 
