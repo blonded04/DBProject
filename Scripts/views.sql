@@ -51,3 +51,34 @@ FROM GenshinDB.units;
 CREATE OR REPLACE VIEW players_view AS
 SELECT id, unit_1, unit_2, unit_3, unit_4, elemental_bonus
 FROM GenshinDB.players;
+
+-- hard
+
+-- all archonts
+CREATE OR REPLACE VIEW characters_archont_view AS
+SELECT *
+FROM GenshinDB.characters
+WHERE name = (SELECT archont FROM GenshinDB.countries WHERE name = characters.country);
+
+-- sets stats
+CREATE OR REPLACE VIEW artifact_stats_view AS
+SELECT art.set_name,
+    SUM(art.set_bonus_stats) AS total_set_bonus_stats,
+    SUM(s.damage) AS total_damage,
+    SUM(s.damage_coef) AS total_damage_coef,
+    SUM(s.hp) AS total_hp,
+    SUM(s.hp_coef) AS total_hp_coef,
+    SUM(s.heal_coef) AS total_heal_coef,
+    ARRAY[
+        SUM(s.elemental_coefs[1]),
+        SUM(s.elemental_coefs[2]),
+        SUM(s.elemental_coefs[3]),
+        SUM(s.elemental_coefs[4]),
+        SUM(s.elemental_coefs[5]),
+        SUM(s.elemental_coefs[6]),
+        SUM(s.elemental_coefs[7]),
+        SUM(s.elemental_coefs[8])
+    ] AS total_elemental_coefs
+FROM GenshinDB.artifacts art
+JOIN GenshinDB.stats s ON art.stats = s.id
+GROUP BY art.set_name;
