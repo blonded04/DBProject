@@ -124,9 +124,9 @@ $$ LANGUAGE plpgsql;
 
 ALTER TABLE units ADD CHECK (weapon_check(_character, _weapon));
 
-CREATE OR REPLACE FUNCTION artifact_check(_artifact TEXT, _type TEXT) RETURNS BOOLEAN AS $$ 
+CREATE OR REPLACE FUNCTION artifact_check(_artifact TEXT, _expected_type t_artifact) RETURNS BOOLEAN AS $$ 
 BEGIN
-RETURN ((SELECT _type FROM artifacts WHERE _name_ = _artifact) = _type);
+RETURN ((SELECT _type FROM artifacts WHERE _name = _artifact) = _expected_type);
 END;
 $$ LANGUAGE plpgsql;
 

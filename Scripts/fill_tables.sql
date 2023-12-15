@@ -32,7 +32,7 @@ INSERT INTO countries(_name, _element, _archont) VALUES ('Natlan', 'Pyro', 'Mura
 INSERT INTO countries(_name, _element, _archont) VALUES ('Snezhnaya', 'Cryo', 'Tsaritsa');
 
 -- filling weapons (+ their _stats, + their updates)
---catalysts
+-- catalysts
 WITH weapon_stats AS (INSERT INTO stats(_damage, _elemental_coefs) VALUES (542, '{0, 0.26, 0.26, 0.26, 0.26, 0.26, 0.26, 0.26}') RETURNING _id),
      item_update AS (INSERT INTO updates(_version, _type, _item) VALUES (3.2, 'Weapon', 'A Thousand Floating Dreams') RETURNING _id)
 INSERT INTO weapons(_name, _type, _stats, _update)
@@ -57,7 +57,7 @@ INSERT INTO weapons(_name, _type, _stats, _update)
 SELECT 'Jadefalls Splendor', 'Catalyst', (SELECT _id FROM weapon_stats), (SELECT _id FROM item_update)
 FROM weapon_stats, item_update;
 
---bows
+-- bows
 WITH weapon_stats AS (INSERT INTO stats(_damage, _damage_coef) VALUES (608, 0.496) RETURNING _id),
      item_update AS (INSERT INTO updates(_version, _type, _item) VALUES (1.0, 'Weapon', 'Amos Bow') RETURNING _id)
 INSERT INTO weapons(_name, _type, _stats, _update)
@@ -88,7 +88,7 @@ INSERT INTO weapons(_name, _type, _stats, _update)
 SELECT 'Polar Star', 'Bow', (SELECT _id FROM weapon_stats), (SELECT _id FROM item_update)
 FROM weapon_stats, item_update;
 
---spear
+-- spear
 WITH weapon_stats AS (INSERT INTO stats(_damage, _damage_coef, _elemental_coefs) VALUES (741, 0.165, '{0, 0.24, 0.24, 0.24, 0.24, 0.24, 0.24, 0.24}') RETURNING _id),
      item_update AS (INSERT INTO updates(_version, _type, _item) VALUES (2.4, 'Weapon', 'Calamity Queller') RETURNING _id)
 INSERT INTO weapons(_name, _type, _stats, _update)
@@ -119,7 +119,7 @@ INSERT INTO weapons(_name, _type, _stats, _update)
 SELECT 'Staff of Homa', 'Spear', (SELECT _id FROM weapon_stats), (SELECT _id FROM item_update)
 FROM weapon_stats, item_update;
 
---one handed
+-- one handed
 WITH weapon_stats AS (INSERT INTO stats(_damage, _damage_coef, _elemental_coefs) VALUES (674, 0.4, '{0.413, 0, 0, 0, 0, 0, 0, 0}') RETURNING _id),
      item_update AS (INSERT INTO updates(_version, _type, _item) VALUES (1.0, 'Weapon', 'Aquila Favonia') RETURNING _id)
 INSERT INTO weapons(_name, _type, _stats, _update)
@@ -517,5 +517,7 @@ SELECT 'Thoma', 'Spear', 'Inazuma', (SELECT _id FROM character_stats), (SELECT _
 FROM character_skill_ultimate, character_skill_elemental, character_update, character_stats;
 
 -- filling units
+INSERT INTO units(_character, _weapon, _flower_artifact, _clock_artifact, _hat_artifact) 
+VALUES ('Razor', 'Wolfs Gravestone', 'Wind Rose of Stone Heart', 'Bust Down', 'Goggle Hat of Fury');
 
 -- filling players
