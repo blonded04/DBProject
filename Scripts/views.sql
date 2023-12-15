@@ -82,3 +82,10 @@ SELECT art.set_name,
 FROM GenshinDB.artifacts art
 JOIN GenshinDB.stats s ON art.stats = s.id
 GROUP BY art.set_name;
+
+-- ultimate skills of archonts
+CREATE OR REPLACE VIEW characters_ultimate_skill_view AS
+SELECT ch.name AS character_name, ch.ultimate_skill
+FROM GenshinDB.characters ch
+JOIN GenshinDB.countries cn ON ch.name = cn.archont
+JOIN GenshinDB.skills sk ON ch.ultimate_skill = sk.name;
