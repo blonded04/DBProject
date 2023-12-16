@@ -13,14 +13,14 @@ TRUNCATE units CASCADE;
 TRUNCATE players CASCADE;
 
 -- filling elements  ('Physical', 'Anemo', 'Geo', 'Electro', 'Dendro', 'Hydro', 'Pyro', 'Cryo')
-INSERT INTO elements(_name, _reactions) VALUES ('Physical', '{false, false, false, false, false, false, false, false}');
-INSERT INTO elements(_name, _reactions) VALUES ('Anemo',    '{false, false, false, true, false, true, true, true}');
-INSERT INTO elements(_name, _reactions) VALUES ('Geo',      '{false, false, false, true, false, true, true, true}');
-INSERT INTO elements(_name, _reactions) VALUES ('Electro',  '{false, true, true, false, true, true, true, true}');
-INSERT INTO elements(_name, _reactions) VALUES ('Dendro',   '{false, false, false, true, false, true, true, false}');
-INSERT INTO elements(_name, _reactions) VALUES ('Hydro',    '{false, true, true, true, true, false, true, true}');
-INSERT INTO elements(_name, _reactions) VALUES ('Pyro',     '{false, true, true, true, true, true, false, true}');
-INSERT INTO elements(_name, _reactions) VALUES ('Cryo',     '{false, true, true, true, false, true, true, false}');
+INSERT INTO elements(_name, _reactions, _id) VALUES ('Physical', '{false, false, false, false, false, false, false, false}', 1);
+INSERT INTO elements(_name, _reactions, _id) VALUES ('Anemo',    '{false, false, false, true, false, true, true, true}', 2);
+INSERT INTO elements(_name, _reactions, _id) VALUES ('Geo',      '{false, false, false, true, false, true, true, true}', 3);
+INSERT INTO elements(_name, _reactions, _id) VALUES ('Electro',  '{false, true, true, false, true, true, true, true}', 4);
+INSERT INTO elements(_name, _reactions, _id) VALUES ('Dendro',   '{false, false, false, true, false, true, true, false}', 5);
+INSERT INTO elements(_name, _reactions, _id) VALUES ('Hydro',    '{false, true, true, true, true, false, true, true}', 6);
+INSERT INTO elements(_name, _reactions, _id) VALUES ('Pyro',     '{false, true, true, true, true, true, false, true}', 7);
+INSERT INTO elements(_name, _reactions, _id) VALUES ('Cryo',     '{false, true, true, true, false, true, true, false}', 8);
 
 -- filling countries
 INSERT INTO countries(_name, _element, _archont) VALUES ('Mondstadt', 'Anemo', 'Venti');
@@ -519,5 +519,8 @@ FROM character_skill_ultimate, character_skill_elemental, character_update, char
 -- filling units
 INSERT INTO units(_character, _weapon, _flower_artifact, _clock_artifact, _hat_artifact) 
 VALUES ('Razor', 'Wolfs Gravestone', 'Wind Rose of Stone Heart', 'Bust Down', 'Goggle Hat of Fury');
+
+INSERT INTO units(_character, _weapon, _flower_artifact, _clock_artifact, _hat_artifact) 
+VALUES ('Baizhu', 'Everlasting Moonglow', 'Maidens Distant Love', 'Maidens Passing Youth', 'Maidens Fading Beauty');
 
 -- filling players
