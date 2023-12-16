@@ -8,7 +8,7 @@ SET search_path = GenshinDB;
 -- enums creation
 CREATE TYPE t_element AS ENUM ('Physical', 'Anemo', 'Geo', 'Electro', 'Dendro', 'Hydro', 'Pyro', 'Cryo');
 CREATE TYPE t_weapon AS ENUM ('One handed', 'Two handed', 'Bow', 'Spear', 'Catalyst');
-CREATE TYPE t_skill AS ENUM ('Elemental', 'Ultimate');
+CREATE TYPE t_skill AS ENUM ('Weapon attack', 'Elemental', 'Ultimate');
 CREATE TYPE t_artifact AS ENUM ('Hat', 'Clock', 'Flower');
 CREATE TYPE t_item AS ENUM ('Character', 'Artifact', 'Weapon');
 
@@ -16,6 +16,7 @@ CREATE TYPE t_item AS ENUM ('Character', 'Artifact', 'Weapon');
 -- elements
 CREATE TABLE elements(
     _name t_element PRIMARY KEY,
+    _id INT NOT NULL UNIQUE,
     _reactions BOOLEAN[8] DEFAULT '{false, false, false, false, false, false, false, false}'::BOOLEAN[]
 );
 
@@ -93,11 +94,13 @@ CREATE TABLE units(
     _flower_artifact TEXT REFERENCES artifacts(_name),
     _clock_artifact TEXT REFERENCES artifacts(_name),
     _hat_artifact TEXT REFERENCES artifacts(_name),
+    _is_set_equipped BOOLEAN DEFAULT false,
     _total_hp INT DEFAULT 1000,
-    _additional_damage INT DEFAULT 0,
-    _boost_damage FLOAT DEFAULT 1,
-    _boost_elemental FLOAT[8] DEFAULT '{1, 1, 1, 1, 1, 1, 1, 1}'::FLOAT[],
-    _boost_heal FLOAT DEFAULT 1
+    _weapon_attack_damage INT DEFAULT 0,
+    _elemental_skill_damage INT DEFAULT 0,
+    _ultimate_skill_damage INT DEFAULT 0,
+    _elemental_skill_heal INT DEFAULT 0,
+    _ultimate_skill_heal INT DEFAULT 0
 );
 
 -- players
@@ -110,10 +113,17 @@ CREATE TABLE players(
     _elemental_bonus FLOAT[8] DEFAULT '{0, 0, 0, 0, 0, 0, 0, 0}'::FLOAT[]
 );
 
+-- reactions
+CREATE TABLE reactions(
+    _first t_element NOT NULL,
+    _second t_element NOT NULL,
+    _reaction_bonus FLOAT DEFAULT 0,
+    UNIQUE (_first, _second)
+);
+
 -- adding array constraints
 ALTER TABLE stats ADD CHECK (array_ndims(_elemental_coefs) = 1 AND array_length(_elemental_coefs, 1) = 8);
 ALTER TABLE players ADD CHECK (array_ndims(_elemental_bonus) = 1 AND array_length(_elemental_bonus, 1) = 8);
-ALTER TABLE units ADD CHECK (array_ndims(_boost_elemental) = 1 AND array_length(_boost_elemental, 1) = 8);
 ALTER TABLE elements ADD CHECK (array_ndims(_reactions) = 1 AND array_length(_reactions, 1) = 8);
 
 CREATE OR REPLACE FUNCTION weapon_check(_character TEXT, _weapon TEXT) RETURNS BOOLEAN AS $$ 
