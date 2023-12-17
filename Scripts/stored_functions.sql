@@ -1,15 +1,17 @@
 SET search_path = GenshinDB;
 
+DROP TRIGGER IF EXISTS update_unit on units;
+
 -- task 9-10: procedure of character's characteristics initialisation + it's trigger on unit changes
 CREATE OR REPLACE FUNCTION check_artifact_set(unit_id INT) RETURNS BOOLEAN AS $$ 
 BEGIN
-	RETURN ((SELECT count(1) 
-		FROM (SELECT count(1) cnt
-			FROM units
-			INNER JOIN artifacts ON artifacts."_name" IN (units._flower_artifact, units._clock_artifact, units._hat_artifact)
-			WHERE units._id = unit_id
-			GROUP BY artifacts."_set_name"
-		)) = 1);
+    RETURN ((SELECT count(1) 
+        FROM (SELECT count(1) cnt
+            FROM units
+            INNER JOIN artifacts ON artifacts."_name" IN (units._flower_artifact, units._clock_artifact, units._hat_artifact)
+            WHERE units._id = unit_id
+            GROUP BY artifacts."_set_name"
+        ) selected) = 1);
 END;
 $$ LANGUAGE plpgsql;
 
@@ -23,11 +25,11 @@ unit_clock TEXT;
 unit_hat TEXT;
 BEGIN
     -- 1) get unit character, weapon and artifacts
-	SELECT _character, _weapon, _flower_artifact, _clock_artifact, _hat_artifact 
-	INTO unit_character, unit_weapon, unit_flower, unit_clock, unit_hat
-	FROM units WHERE _id = unit_id;
+    SELECT _character, _weapon, _flower_artifact, _clock_artifact, _hat_artifact 
+    INTO unit_character, unit_weapon, unit_flower, unit_clock, unit_hat
+    FROM units WHERE _id = unit_id;
     -- 2) add character stats
-	SELECT unit_stats_ids || _base_stats 
+    SELECT unit_stats_ids || _base_stats 
     INTO unit_stats_ids 
     FROM "characters" 
     WHERE _name = unit_character;
@@ -124,32 +126,32 @@ unit_stats_ids INT[];
 total_hp INT;
 total_heal_coef FLOAT;
 BEGIN
-	is_set_equipped := check_artifact_set(unit_id);
-	unit_stats_ids := get_unit_stats(unit_id);
-	total_hp := get_hp(unit_stats_ids);
+    is_set_equipped := check_artifact_set(unit_id);
+    unit_stats_ids := get_unit_stats(unit_id);
+    total_hp := get_hp(unit_stats_ids);
     total_heal_coef := get_heal_coef(unit_stats_ids) + 1;
-	UPDATE units 
-	SET _is_set_equipped = is_set_equipped, 
-	    _total_hp = total_hp,
-	    _weapon_attack_damage = get_skill_damage('Weapon attack', unit_stats_ids, unit_id),
+    UPDATE units 
+    SET _is_set_equipped = is_set_equipped, 
+        _total_hp = total_hp,
+        _weapon_attack_damage = get_skill_damage('Weapon attack', unit_stats_ids, unit_id),
         _elemental_skill_damage = get_skill_damage('Elemental', unit_stats_ids, unit_id),
         _ultimate_skill_damage = get_skill_damage('Ultimate', unit_stats_ids, unit_id),
         _elemental_skill_heal = total_hp * get_skill_heal('Elemental', unit_id) * total_heal_coef,
         _ultimate_skill_heal = total_hp * get_skill_heal('Ultimate', unit_id) * total_heal_coef
-	WHERE _id = unit_id;
+    WHERE _id = unit_id;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION call_unit_update() RETURNS TRIGGER AS $$
 BEGIN
     IF (TG_OP = 'INSERT' OR (OLD.* IS DISTINCT FROM NEW.*)) THEN
-	   CALL update_unit_statistics(NEW._id);
+       CALL update_unit_statistics(NEW._id);
     END IF;
-	RETURN NULL;
+    RETURN NULL;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE TRIGGER update_unit
+CREATE TRIGGER update_unit
 AFTER INSERT OR UPDATE ON units
 FOR EACH ROW
 EXECUTE FUNCTION call_unit_update();

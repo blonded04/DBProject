@@ -556,6 +556,54 @@ INSERT INTO units(_character, _weapon, _flower_artifact, _clock_artifact, _hat_a
 VALUES ('Razor', 'Wolfs Gravestone', 'Wind Rose of Stone Heart', 'Bust Down', 'Goggle Hat of Fury');
 
 INSERT INTO units(_character, _weapon, _flower_artifact, _clock_artifact, _hat_artifact) 
+VALUES ('Razor', 'Rainslasher', 'Thunderbirds Mercy', 'Hourglass of Thunder', 'Thunder Summoners Crown');
+
+INSERT INTO units(_character, _weapon, _flower_artifact, _clock_artifact, _hat_artifact) 
 VALUES ('Baizhu', 'Everlasting Moonglow', 'Maidens Distant Love', 'Maidens Passing Youth', 'Maidens Fading Beauty');
 
+INSERT INTO units(_character, _weapon, _flower_artifact, _clock_artifact, _hat_artifact)
+VALUES ('Gorou', 'Elegy for the End', 'Flower of Creviced Cliff', 'Sundial of Enduring Jade', 'Mask of Solitude Basalt');
+
+INSERT INTO units(_character, _weapon, _flower_artifact, _clock_artifact, _hat_artifact)
+VALUES ('Gorou', 'Hunters Path', 'Stainless Bloom', 'Sundial of Enduring Jade', 'Thunder Summoners Crown');
+
+INSERT INTO units(_character, _weapon, _flower_artifact, _clock_artifact, _hat_artifact)
+VALUES ('Venti', 'Amos Bow', 'Maidens Distant Love', 'Hourglass of Thunder', 'Laurel Coronet');
+
+INSERT INTO units(_character, _weapon, _flower_artifact, _clock_artifact, _hat_artifact)
+VALUES ('Venti', 'Aqua Simulacra', 'In Remembrance of Viridescent Fields', 'Viridescent Venerers Determination', 'Viridescent Venerers Diadem');
+
+INSERT INTO units(_character, _weapon, _flower_artifact, _clock_artifact, _hat_artifact)
+VALUES ('Yae Miko', 'Everlasting Moonglow', 'Wind Rose of Stone Heart', 'Hourglass of Thunder', 'Thunder Summoners Crown');
+
+INSERT INTO units(_character, _weapon, _flower_artifact, _clock_artifact, _hat_artifact)
+VALUES ('Yae Miko', 'Cashflow Supervision', 'Flower of Creviced Cliff', 'Viridescent Venerers Determination', 'Laurel Coronet');
+
+INSERT INTO units(_character, _weapon, _flower_artifact, _clock_artifact, _hat_artifact)
+VALUES ('Raiden Shogun', 'Skyward Spine', 'Flower of Creviced Cliff', 'A Time of Insight', 'Wine-Stained Tricorne');
+
+INSERT INTO units(_character, _weapon, _flower_artifact, _clock_artifact, _hat_artifact)
+VALUES ('Raiden Shogun', 'Engulfing Lightning', 'Witchs Flower of Blaze', 'Witchs End Time', 'Witchs Scorching Hat');
+
+INSERT INTO units(_character, _weapon, _flower_artifact, _clock_artifact, _hat_artifact)
+VALUES ('Freminet', 'Redhorn Stonethresher', 'Maidens Distant Love', 'Maidens Passing Youth', 'Maidens Fading Beauty');
+
+INSERT INTO units(_character, _weapon, _flower_artifact, _clock_artifact, _hat_artifact)
+VALUES ('Sangonomiya Kokomi', 'A Thousand Floating Dreams', 'Gilded Corsage', 'Copper Compass', 'Wine-Stained Tricorne');
+
+INSERT INTO units(_character, _weapon, _flower_artifact, _clock_artifact, _hat_artifact)
+VALUES ('Thoma', 'Staff of Homa', 'Wind Rose of Stone Heart', 'Bust Down', 'Goggle Hat of Fury');
+
+INSERT INTO units(_character, _weapon, _flower_artifact, _clock_artifact, _hat_artifact)
+VALUES ('Lyney', 'Aqua Simulacra', 'In Remembrance of Viridescent Fields', 'Witchs End Time', 'Mask of Solitude Basalt');
+
 -- filling players
+INSERT INTO players(_unit_1, _unit_2, _unit_3, _unit_4)
+SELECT u1._id, u2._id, u3._id, u4._id
+FROM units u1, units u2, units u3, units u4
+WHERE u1._id <> u2._id 
+  AND u1._id <> u3._id 
+  AND u1._id <> u4._id 
+  AND u2._id <> u3._id 
+  AND u2._id <> u4._id 
+  AND u3._id <> u4._id;
