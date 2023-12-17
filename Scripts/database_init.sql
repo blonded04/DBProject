@@ -117,7 +117,7 @@ CREATE TABLE players(
 CREATE TABLE reactions(
     _first t_element NOT NULL,
     _second t_element NOT NULL,
-    _reaction_bonus FLOAT DEFAULT 0,
+    _bonus FLOAT DEFAULT 0,
     UNIQUE (_first, _second)
 );
 

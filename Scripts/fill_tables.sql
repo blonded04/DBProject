@@ -11,6 +11,7 @@ TRUNCATE artifacts CASCADE;
 TRUNCATE characters CASCADE;
 TRUNCATE units CASCADE;
 TRUNCATE players CASCADE;
+TRUNCATE reactions CASCADE;
 
 -- filling elements  ('Physical', 'Anemo', 'Geo', 'Electro', 'Dendro', 'Hydro', 'Pyro', 'Cryo')
 INSERT INTO elements(_name, _reactions, _id) VALUES ('Physical', '{false, false, false, false, false, false, false, false}', 1);
@@ -30,6 +31,40 @@ INSERT INTO countries(_name, _element, _archont) VALUES ('Sumeru', 'Dendro', 'Na
 INSERT INTO countries(_name, _element, _archont) VALUES ('Fontaine', 'Hydro', 'Furina');
 INSERT INTO countries(_name, _element, _archont) VALUES ('Natlan', 'Pyro', 'Murata');
 INSERT INTO countries(_name, _element, _archont) VALUES ('Snezhnaya', 'Cryo', 'Tsaritsa');
+
+-- filling reactions
+INSERT INTO reactions(_first, _second, _bonus) VALUES ('Anemo', 'Electro', 0.25);
+INSERT INTO reactions(_first, _second, _bonus) VALUES ('Anemo', 'Hydro', 0.25);
+INSERT INTO reactions(_first, _second, _bonus) VALUES ('Anemo', 'Pyro', 0.25);
+INSERT INTO reactions(_first, _second, _bonus) VALUES ('Anemo', 'Cryo', 0.25);
+
+INSERT INTO reactions(_first, _second, _bonus) VALUES ('Geo', 'Electro', 0.3);
+INSERT INTO reactions(_first, _second, _bonus) VALUES ('Geo', 'Hydro', 0.3);
+INSERT INTO reactions(_first, _second, _bonus) VALUES ('Geo', 'Pyro', 0.3);
+INSERT INTO reactions(_first, _second, _bonus) VALUES ('Geo', 'Cryo', 0.3);
+
+INSERT INTO reactions(_first, _second, _bonus) VALUES ('Electro', 'Dendro', 0.35);
+INSERT INTO reactions(_first, _second, _bonus) VALUES ('Electro', 'Hydro', 0.5);
+INSERT INTO reactions(_first, _second, _bonus) VALUES ('Electro', 'Pyro', 0.5);
+INSERT INTO reactions(_first, _second, _bonus) VALUES ('Electro', 'Cryo', 0.5);
+
+INSERT INTO reactions(_first, _second, _bonus) VALUES ('Dendro', 'Electro', 0.35);
+INSERT INTO reactions(_first, _second, _bonus) VALUES ('Dendro', 'Hydro', 0.4);
+INSERT INTO reactions(_first, _second, _bonus) VALUES ('Dendro', 'Pyro', 0.75);
+
+INSERT INTO reactions(_first, _second, _bonus) VALUES ('Hydro', 'Dendro', 0.5);
+INSERT INTO reactions(_first, _second, _bonus) VALUES ('Hydro', 'Electro', 0.2);
+INSERT INTO reactions(_first, _second, _bonus) VALUES ('Hydro', 'Pyro', 1);
+INSERT INTO reactions(_first, _second, _bonus) VALUES ('Hydro', 'Cryo', 0.5);
+
+INSERT INTO reactions(_first, _second, _bonus) VALUES ('Pyro', 'Dendro', 0.5);
+INSERT INTO reactions(_first, _second, _bonus) VALUES ('Pyro', 'Hydro', 0.5);
+INSERT INTO reactions(_first, _second, _bonus) VALUES ('Pyro', 'Electro', 1);
+INSERT INTO reactions(_first, _second, _bonus) VALUES ('Pyro', 'Cryo', 0.75);
+
+INSERT INTO reactions(_first, _second, _bonus) VALUES ('Cryo', 'Hydro', 0.3);
+INSERT INTO reactions(_first, _second, _bonus) VALUES ('Cryo', 'Pyro', 0.25);
+INSERT INTO reactions(_first, _second, _bonus) VALUES ('Cryo', 'Electro', 0.75);
 
 -- filling weapons (+ their _stats, + their updates)
 -- catalysts
