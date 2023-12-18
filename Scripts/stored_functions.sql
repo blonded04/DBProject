@@ -1,8 +1,10 @@
 SET search_path = GenshinDB;
 
-DROP TRIGGER IF EXISTS update_unit on units;
+DROP TRIGGER IF EXISTS update_unit ON units;
+DROP TRIGGER IF EXISTS update_player ON players;
 
 -- task 9-10: procedure of character's characteristics initialisation + it's trigger on unit changes
+-- update_unit trigger+procedures
 CREATE OR REPLACE FUNCTION check_artifact_set(unit_id INT) RETURNS BOOLEAN AS $$ 
 BEGIN
     RETURN ((SELECT count(1) 
@@ -156,10 +158,68 @@ AFTER INSERT OR UPDATE ON units
 FOR EACH ROW
 EXECUTE FUNCTION call_unit_update();
 
---SELECT * FROM units;
---UPDATE units SET _flower_artifact = 'Stainless Bloom';
---SELECT * FROM units;
---UPDATE units SET _flower_artifact = 'Wind Rose of Stone Heart';
---SELECT * FROM units;
+-- update_player trigger+procedures
+CREATE OR REPLACE PROCEDURE update_player_statistics(player_id INT) AS $$
+DECLARE 
+column_name1 TEXT;
+column_name2 TEXT;
+diff_elemental_value1 FLOAT := 0.0;
+diff_elemental_value2 FLOAT := 0.0;
+elemental_index1 INT;
+elemental_index2 INT;
+element1 t_element;
+element2 t_element;
+elemental_bonus FLOAT[8] := '{1, 1, 1, 1, 1, 1, 1, 1}'::FLOAT[];
+reaction_presented bigint := 0;
+BEGIN
+    FOR unit_index1 IN 1..3 LOOP
+        column_name1 := '_unit_' || unit_index1;
+        FOR unit_index2 IN unit_index1+1..4 LOOP
+            column_name2 := '_unit_' || unit_index2;
+        
+            EXECUTE 'SELECT e._name, e._id FROM elements e INNER JOIN characters c ON c._element = e._name INNER JOIN units u ON u._character = c._name INNER JOIN players p ON p._id = $1 AND u._id = p.' || column_name1
+            USING player_id
+            INTO element1, elemental_index1;
+        
+            EXECUTE 'SELECT e._name, e._id FROM elements e INNER JOIN characters c ON c._element = e._name INNER JOIN units u ON u._character = c._name INNER JOIN players p ON p._id = $1 AND u._id = p.' || column_name2
+            USING player_id
+            INTO element2, elemental_index2;
+            
+            diff_elemental_value1 := 0;
+            IF (SELECT _reactions[elemental_index2] FROM elements WHERE _id = elemental_index1) THEN
+                diff_elemental_value1 := COALESCE((SELECT _bonus FROM reactions r WHERE r._first = element1 AND r._second = element2), 0);
+            END IF;
+        
+            elemental_bonus[elemental_index1] := elemental_bonus[elemental_index1] + diff_elemental_value1;
+            elemental_bonus[elemental_index2] := elemental_bonus[elemental_index2] + diff_elemental_value1;
+        
+            diff_elemental_value2 := 0;
+            IF (SELECT _reactions[elemental_index1] FROM elements WHERE _id = elemental_index2) THEN 
+                diff_elemental_value2 := COALESCE((SELECT _bonus FROM reactions r WHERE r._first = element2 AND r._second = element1), 0);
+            END IF;
+            
+            elemental_bonus[elemental_index1] := elemental_bonus[elemental_index1] + diff_elemental_value2;
+            elemental_bonus[elemental_index2] := elemental_bonus[elemental_index2] + diff_elemental_value2;
+        END LOOP;
+    END LOOP;
+    
+    UPDATE players
+    SET _elemental_bonus = elemental_bonus
+    WHERE _id = player_id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION call_player_update() RETURNS TRIGGER AS $$
+BEGIN 
+    IF (TG_OP = 'INSERT' OR (OLD.* IS DISTINCT FROM NEW.*)) THEN
+        CALL update_player_statistics(NEW._id);
+    END IF;
+    RETURN NULL;
+END
+$$ LANGUAGE plpgsql;
 
 
+CREATE TRIGGER update_player
+AFTER INSERT OR UPDATE ON players
+FOR EACH ROW 
+EXECUTE FUNCTION call_player_update();

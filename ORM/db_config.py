@@ -1,0 +1,5 @@
+PROJECT_DBNAME = "genshindb"
+PROJECT_HOSTNAME = "valery"
+PROJECT_USERNAME = "postgresql"
+PROJECT_PASSWORD = "password"
+PROJECT_PORT = "5432"
