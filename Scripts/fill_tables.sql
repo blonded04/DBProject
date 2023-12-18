@@ -601,11 +601,14 @@ VALUES ('Lyney', 'Aqua Simulacra', 'In Remembrance of Viridescent Fields', 'Witc
 INSERT INTO players(_unit_1, _unit_2, _unit_3, _unit_4)
 SELECT u1._id, u2._id, u3._id, u4._id
 FROM units u1, units u2, units u3, units u4
-WHERE u1._id <> u2._id AND u1._character <> u2._character
-  AND u1._id <> u3._id AND u1._character <> u3._character
-  AND u1._id <> u4._id AND u1._character <> u4._character
-  AND u2._id <> u3._id AND u2._character <> u3._character
-  AND u2._id <> u4._id AND u2._character <> u4._character
-  AND u3._id <> u4._id AND u3._character <> u4._character
+WHERE u1._character <> u2._character
+  AND u1._character <> u3._character
+  AND u1._character <> u4._character
+  AND u2._character <> u3._character
+  AND u2._character <> u4._character
+  AND u3._character <> u4._character
+  AND u1._id < u2._id 
+  AND u2._id < u3._id
+  AND u3._id < u4._id
 ORDER BY random()
 LIMIT 15;
