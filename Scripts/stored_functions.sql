@@ -161,30 +161,17 @@ EXECUTE FUNCTION call_unit_update();
 -- update_player trigger+procedures
 CREATE OR REPLACE PROCEDURE update_player_statistics(player_id INT) AS $$
 DECLARE 
-column_name TEXT;
 column_name1 TEXT;
 column_name2 TEXT;
-elemental_index INT;
 diff_elemental_value1 FLOAT := 0.0;
 diff_elemental_value2 FLOAT := 0.0;
 elemental_index1 INT;
 elemental_index2 INT;
 element1 t_element;
 element2 t_element;
-elemental_bonus FLOAT[8] := '{0, 0, 0, 0, 0, 0, 0, 0}'::FLOAT[];
+elemental_bonus FLOAT[8] := '{1, 1, 1, 1, 1, 1, 1, 1}'::FLOAT[];
+reaction_presented bigint := 0;
 BEGIN
-    FOR unit_index IN 1..4 LOOP
-        column_name := '_unit_' || unit_index;
-        
-        EXECUTE 'SELECT e._id FROM elements e INNER JOIN characters c ON c._element = e._name INNER JOIN units u ON u._character = c._name INNER JOIN players p ON p._id = $1 AND u._id = p.' || column_name
-        USING player_id
-        INTO elemental_index;
-        
-        IF elemental_index IS NOT NULL THEN
-            elemental_bonus[elemental_index] := elemental_bonus[elemental_index] + 1;
-        END IF;
-    END LOOP;
-
     FOR unit_index1 IN 1..3 LOOP
         column_name1 := '_unit_' || unit_index1;
         FOR unit_index2 IN unit_index1+1..4 LOOP
@@ -197,30 +184,22 @@ BEGIN
             EXECUTE 'SELECT e._name, e._id FROM elements e INNER JOIN characters c ON c._element = e._name INNER JOIN units u ON u._character = c._name INNER JOIN players p ON p._id = $1 AND u._id = p.' || column_name2
             USING player_id
             INTO element2, elemental_index2;
-        
-            SELECT _bonus FROM reactions r WHERE r._first = element1 AND r._second = element2 
-            INTO diff_elemental_value1;
-        
-            IF diff_elemental_value1 IS NOT NULL THEN
-                IF elemental_index1 IS NOT NULL THEN
-                    elemental_bonus[elemental_index1] := elemental_bonus[elemental_index1] + diff_elemental_value1;
-                END IF;
-                IF elemental_index2 IS NOT NULL THEN
-                    elemental_bonus[elemental_index2] := elemental_bonus[elemental_index2] + diff_elemental_value1;
-                END IF;
-            END IF;
-        
-            SELECT _bonus FROM reactions r WHERE r._first = element2 AND r._second = element1
-            INTO diff_elemental_value2;
             
-            IF diff_elemental_value2 IS NOT NULL THEN
-                IF elemental_index1 IS NOT NULL THEN
-                    elemental_bonus[elemental_index1] := elemental_bonus[elemental_index1] + diff_elemental_value2;
-                END IF;
-                IF elemental_index2 IS NOT NULL THEN
-                    elemental_bonus[elemental_index2] := elemental_bonus[elemental_index2] + diff_elemental_value2;
-                END IF;
+            diff_elemental_value1 := 0;
+            IF (SELECT _reactions[elemental_index2] FROM elements WHERE _id = elemental_index1) THEN
+                diff_elemental_value1 := COALESCE((SELECT _bonus FROM reactions r WHERE r._first = element1 AND r._second = element2), 0);
             END IF;
+        
+            elemental_bonus[elemental_index1] := elemental_bonus[elemental_index1] + diff_elemental_value1;
+            elemental_bonus[elemental_index2] := elemental_bonus[elemental_index2] + diff_elemental_value1;
+        
+            diff_elemental_value2 := 0;
+            IF (SELECT _reactions[elemental_index1] FROM elements WHERE _id = elemental_index2) THEN 
+                diff_elemental_value2 := COALESCE((SELECT _bonus FROM reactions r WHERE r._first = element2 AND r._second = element1), 0);
+            END IF;
+            
+            elemental_bonus[elemental_index1] := elemental_bonus[elemental_index1] + diff_elemental_value2;
+            elemental_bonus[elemental_index2] := elemental_bonus[elemental_index2] + diff_elemental_value2;
         END LOOP;
     END LOOP;
     
