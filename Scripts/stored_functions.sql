@@ -176,7 +176,7 @@ BEGIN
     FOR unit_index IN 1..4 LOOP
         column_name := '_unit_' || unit_index;
         
-        EXECUTE 'SELECT e._id FROM elements e LEFT JOIN characters c ON c._element = e._name RIGHT JOIN units u ON u._character = c._name RIGHT JOIN players p ON p._id = $1 AND u._id = p.' || column_name
+        EXECUTE 'SELECT e._id FROM elements e INNER JOIN characters c ON c._element = e._name INNER JOIN units u ON u._character = c._name INNER JOIN players p ON p._id = $1 AND u._id = p.' || column_name
         USING player_id
         INTO elemental_index;
         
@@ -190,11 +190,11 @@ BEGIN
         FOR unit_index2 IN unit_index1+1..4 LOOP
             column_name2 := '_unit_' || unit_index2;
         
-            EXECUTE 'SELECT e._name, e._id FROM elements e LEFT JOIN characters c ON c._element = e._name RIGHT JOIN units u ON u._character = c._name RIGHT JOIN players p ON p._id = $1 AND u._id = p.' || column_name1
+            EXECUTE 'SELECT e._name, e._id FROM elements e INNER JOIN characters c ON c._element = e._name INNER JOIN units u ON u._character = c._name INNER JOIN players p ON p._id = $1 AND u._id = p.' || column_name1
             USING player_id
             INTO element1, elemental_index1;
         
-            EXECUTE 'SELECT e._name, e._id FROM elements e LEFT JOIN characters c ON c._element = e._name RIGHT JOIN units u ON u._character = c._name RIGHT JOIN players p ON p._id = $1 AND u._id = p.' || column_name2
+            EXECUTE 'SELECT e._name, e._id FROM elements e INNER JOIN characters c ON c._element = e._name INNER JOIN units u ON u._character = c._name INNER JOIN players p ON p._id = $1 AND u._id = p.' || column_name2
             USING player_id
             INTO element2, elemental_index2;
         
