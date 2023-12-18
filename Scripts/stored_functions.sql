@@ -164,9 +164,6 @@ DECLARE
 column_name TEXT;
 column_name1 TEXT;
 column_name2 TEXT;
-new_elemental_value FLOAT := 1.0;
-new_elemental_value1 FLOAT := 1.0;
-new_elemental_value2 FLOAT := 1.0;
 elemental_index INT;
 diff_elemental_value1 FLOAT := 0.0;
 diff_elemental_value2 FLOAT := 0.0;
@@ -184,9 +181,7 @@ BEGIN
         INTO elemental_index;
         
         IF elemental_index IS NOT NULL THEN
-            SELECT elemental_bonus[elemental_index] + 1 
-            INTO new_elemental_value;
-            elemental_bonus[elemental_index] := new_elemental_value;
+            elemental_bonus[elemental_index] := elemental_bonus[elemental_index] + 1;
         END IF;
     END LOOP;
 
@@ -208,12 +203,10 @@ BEGIN
         
             IF diff_elemental_value1 IS NOT NULL THEN
                 IF elemental_index1 IS NOT NULL THEN
-                    SELECT elemental_bonus[elemental_index1] + diff_elemental_value1 INTO new_elemental_value1;
-                    elemental_bonus[elemental_index1] := new_elemental_value1;
+                    elemental_bonus[elemental_index1] := elemental_bonus[elemental_index1] + diff_elemental_value1;
                 END IF;
                 IF elemental_index2 IS NOT NULL THEN
-                    SELECT elemental_bonus[elemental_index2] + diff_elemental_value1 INTO new_elemental_value2;
-                    elemental_bonus[elemental_index2] := new_elemental_value2;
+                    elemental_bonus[elemental_index2] := elemental_bonus[elemental_index2] + diff_elemental_value1;
                 END IF;
             END IF;
         
@@ -222,12 +215,10 @@ BEGIN
             
             IF diff_elemental_value2 IS NOT NULL THEN
                 IF elemental_index1 IS NOT NULL THEN
-                    SELECT elemental_bonus[elemental_index1] + diff_elemental_value2 INTO new_elemental_value1;
-                    elemental_bonus[elemental_index1] := new_elemental_value1;
+                    elemental_bonus[elemental_index1] := elemental_bonus[elemental_index1] + diff_elemental_value1;
                 END IF;
                 IF elemental_index2 IS NOT NULL THEN
-                    SELECT elemental_bonus[elemental_index2] + diff_elemental_value2 INTO new_elemental_value2;
-                    elemental_bonus[elemental_index2] := new_elemental_value2;
+                    elemental_bonus[elemental_index2] := elemental_bonus[elemental_index2] + diff_elemental_value2;
                 END IF;
             END IF;
         END LOOP;
