@@ -14,7 +14,7 @@ TRUNCATE players CASCADE;
 TRUNCATE reactions CASCADE;
 
 -- filling elements  ('Physical', 'Anemo', 'Geo', 'Electro', 'Dendro', 'Hydro', 'Pyro', 'Cryo')
-INSERT INTO elements(_name, _reactions, _id) VALUES ('Physical', '{false, false, false, false, false, false, false, false}', 1);
+INSERT INTO elements(_name, _reactions, _id) VALUES ('Physical', '{false, false, false, false, false, false, false, true}', 1);
 INSERT INTO elements(_name, _reactions, _id) VALUES ('Anemo',    '{false, false, false, true, false, true, true, true}', 2);
 INSERT INTO elements(_name, _reactions, _id) VALUES ('Geo',      '{false, false, false, true, false, true, true, true}', 3);
 INSERT INTO elements(_name, _reactions, _id) VALUES ('Electro',  '{false, true, true, false, true, true, true, true}', 4);
