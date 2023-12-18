@@ -215,7 +215,7 @@ BEGIN
             
             IF diff_elemental_value2 IS NOT NULL THEN
                 IF elemental_index1 IS NOT NULL THEN
-                    elemental_bonus[elemental_index1] := elemental_bonus[elemental_index1] + diff_elemental_value1;
+                    elemental_bonus[elemental_index1] := elemental_bonus[elemental_index1] + diff_elemental_value2;
                 END IF;
                 IF elemental_index2 IS NOT NULL THEN
                     elemental_bonus[elemental_index2] := elemental_bonus[elemental_index2] + diff_elemental_value2;
