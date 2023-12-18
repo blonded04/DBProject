@@ -1,8 +1,10 @@
 SET search_path = GenshinDB;
 
-DROP TRIGGER IF EXISTS update_unit on units;
+DROP TRIGGER IF EXISTS update_unit ON units;
+DROP TRIGGER IF EXISTS update_player ON players;
 
 -- task 9-10: procedure of character's characteristics initialisation + it's trigger on unit changes
+-- update_unit trigger+procedures
 CREATE OR REPLACE FUNCTION check_artifact_set(unit_id INT) RETURNS BOOLEAN AS $$ 
 BEGIN
     RETURN ((SELECT count(1) 
@@ -156,10 +158,82 @@ AFTER INSERT OR UPDATE ON units
 FOR EACH ROW
 EXECUTE FUNCTION call_unit_update();
 
---SELECT * FROM units;
---UPDATE units SET _flower_artifact = 'Stainless Bloom';
---SELECT * FROM units;
---UPDATE units SET _flower_artifact = 'Wind Rose of Stone Heart';
---SELECT * FROM units;
+-- update_player trigger+procedures
+CREATE OR REPLACE PROCEDURAL update_player_statistics(player_id INT) AS $$
+DECLARE 
+column_name TEXT;
+column_name1 TEXT;
+column_name2 TEXT;
+new_elemental_value FLOAT;
+new_elemental_value1 FLOAT;
+new_elemental_value2 FLOAT;
+elemental_index INT;
+diff_elemental_value1 FLOAT;
+diff_elemental_value2 FLOAT;
+elemental_index1 INT;
+elemental_index2 INT;
+element1 t_element;
+element2 t_element;
+elemental_bonus FLOAT[8] DEFAULT '{0, 0, 0, 0, 0, 0, 0, 0}'::FLOAT[];
+BEGIN
+    FOR unit_index IN 1..4 LOOP
+        column_name := '_unit_' || unit_index;
+        
+        EXECUTE 'SELECT e._id FROM elements e LEFT JOIN characters c ON c._element = e._name RIGHT JOIN units u ON u._character = c._name RIGHT JOIN players p ON p._id = player_id AND u._id = p.' || column_name
+        INTO elemental_index;
+        
+        SELECT elemental_bonus[elemental_index] + 1 
+        INTO new_elemental_value;
+    
+        elemental_bonus[elemental_index] := new_elemental_value;
+    END LOOP;
+
+    FOR unit_index1 IN 1..3 LOOP
+        column_name1 := '_unit_' || unit_index1;
+        FOR unit_index2 IN i+1..4 LOOP
+            column_name2 := '_unit_' || unit_index2;
+        
+            EXECUTE 'SELECT e._element, e._id FROM elements e LEFT JOIN characters c ON c._element = e._name RIGHT JOIN units u ON u._character = c._name RIGHT JOIN players p ON p._id = player_id AND u._id = p.' || column_name1
+            INTO element1, elemental_index1;
+        
+            EXECUTE 'SELECT e._element, e._id FROM elements e LEFT JOIN characters c ON c._element = e._name RIGHT JOIN units u ON u._character = c._name RIGHT JOIN players p ON p._id = player_id AND u._id = p.' || column_name2
+            INTO element1, elemental_index1;
+        
+            SELECT _bonus FROM reactions r WHERE r._first = element1 AND r._second = element2 
+            INTO diff_elemental_value_1;
+            
+            SELECT elemental_bonus[elemental_index1] + diff_elemental_value1 INTO new_elemental_value1;
+            SELECT elemental_bonus[elemental_index2] + diff_elemental_value1 INTO new_elemental_value2;
+            elemental_bonus[elemental_index1] := new_elemental_value1;
+            elemental_bonus[elemental_index2] := new_elemental_value2;
+        
+            SELECT _bonus FROM reactions r WHERE r._first = element2 AND r._second = element1
+            INTO diff_elemental_value_2;
+            
+            SELECT elemental_bonus[elemental_index1] + diff_elemental_value2 INTO new_elemental_value1;
+            SELECT elemental_bonus[elemental_index2] + diff_elemental_value2 INTO new_elemental_value2;
+            elemental_bonus[elemental_index1] := new_elemental_value1;
+            elemental_bonus[elemental_index2] := new_elemental_value2;
+        END LOOP;
+    END LOOP;
+    
+    UPDATE players
+    SET _elemental_bonus = elemental_bonus
+    WHERE _id = player_id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION call_player_update() RETURN TRIGGER AS $$
+BEGIN 
+    IF (TG_OP = 'INSERT' OR (OLD.* IS DISTINCT FROM NEW.*)) THEN
+        CALL update_player_statistics(NEW._id);
+    END IF;
+    RETURN NULL;
+END
+$$ LANGUAGE plpgsql;
 
 
+CREATE TRIGGER update_player
+AFTER INSERT OR UPDATE ON players
+FOR EACH ROW 
+EXECUTE FUNCTION call_player_update();
