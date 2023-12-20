@@ -35,7 +35,15 @@ DELETE FROM countries WHERE _archont = 'Bebra';
 -- task 6: motivated queries
 
 -- 1: Найти 3-его юнита по электро урону (берётся сумма всех электро навыков)
-
+SELECT DISTINCT res._unit_id, res._damage
+FROM (SELECT u._id AS _unit_id, (st._damage + sum (sk._base_damage) OVER (PARTITION BY u._id)) AS _damage
+       FROM units AS u
+       INNER JOIN characters ON characters._name = u._character AND characters._element = 'Electro'
+       INNER JOIN skills AS sk ON characters._elemental_skill = sk._name OR characters._ultimate_skill = sk._name
+       INNER JOIN weapons ON u._weapon = weapons._name
+       INNER JOIN stats AS st ON weapons._stats = st._id) res
+ORDER BY _damage desc
+LIMIT 1 OFFSET 2;
 
 -- 2: Максимальное значение хила от элементального навыка у юнитов из Инадзумы
 SELECT max (skills._base_heal)
