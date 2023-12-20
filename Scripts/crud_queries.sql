@@ -38,7 +38,10 @@ DELETE FROM countries WHERE _archont = 'Bebra';
 
 
 -- 2: Максимальное значение хила от элементального навыка у юнитов из Инадзумы
-
+SELECT max (skills._base_heal)
+FROM skills
+INNER JOIN characters ON characters._elemental_skill = skills._name
+WHERE skills._type = 'Elemental' and characters._country = 'Inazuma';
 
 -- 3: Для каждой страны вычислить количество персонажей и юнитов
 SELECT countries._name country, COALESCE(counter.char_cnt, 0) characters_cnt, COALESCE(counter.unit_cnt, 0) units_cnt
