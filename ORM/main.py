@@ -41,6 +41,9 @@ def main():
         class Meta:
             table_name = 'genshindb.characters'
 
+    '''
+    some queries
+    '''
     gorou = Character.get(Character.id == "Gorou")
     print("Gorou is from:", gorou.country)
 
