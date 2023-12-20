@@ -50,6 +50,11 @@ LEFT JOIN
     GROUP BY _country) counter ON countries._name = counter._country;
 
 -- 4: Для каждого персонажа вывести массив индексов его юнитов
+SELECT characters._name, string_agg (cast (units._id AS TEXT), ', ') 
+FROM characters 
+LEFT JOIN units ON units._character = characters._name
+GROUP BY characters._name
+ORDER BY characters._name;
 
 
 -- 5: Найти игрока, у которого лучший бонус для гидро урона за элементальные реакции
