@@ -35,10 +35,21 @@ DELETE FROM countries WHERE _archont = 'Bebra';
 -- task 6: motivated queries
 
 -- 1: Найти 3-его юнита по электро урону (берётся сумма всех электро навыков)
-
+SELECT DISTINCT res._unit_id, res._damage
+FROM (SELECT u._id AS _unit_id, (st._damage + sum (sk._base_damage) OVER (PARTITION BY u._id)) AS _damage
+       FROM units AS u
+       INNER JOIN characters ON characters._name = u._character AND characters._element = 'Electro'
+       INNER JOIN skills AS sk ON characters._elemental_skill = sk._name OR characters._ultimate_skill = sk._name
+       INNER JOIN weapons ON u._weapon = weapons._name
+       INNER JOIN stats AS st ON weapons._stats = st._id) res
+ORDER BY _damage desc
+LIMIT 1 OFFSET 2;
 
 -- 2: Максимальное значение хила от элементального навыка у юнитов из Инадзумы
-
+SELECT max (skills._base_heal)
+FROM skills
+INNER JOIN characters ON characters._elemental_skill = skills._name
+WHERE skills._type = 'Elemental' and characters._country = 'Inazuma';
 
 -- 3: Для каждой страны вычислить количество персонажей и юнитов
 SELECT countries._name country, COALESCE(counter.char_cnt, 0) characters_cnt, COALESCE(counter.unit_cnt, 0) units_cnt
@@ -50,6 +61,11 @@ LEFT JOIN
     GROUP BY _country) counter ON countries._name = counter._country;
 
 -- 4: Для каждого персонажа вывести массив индексов его юнитов
+SELECT characters._name, string_agg (cast (units._id AS TEXT), ', ') 
+FROM characters 
+LEFT JOIN units ON units._character = characters._name
+GROUP BY characters._name
+ORDER BY characters._name;
 
 
 -- 5: Найти игрока, у которого лучший бонус для гидро урона за элементальные реакции
