@@ -16,6 +16,7 @@ ORDER BY _stats DESC;
 SELECT * FROM weapons WHERE _name = 'Lamesaber';
 -- Update
 UPDATE weapons SET _name = 'Lightsaber' WHERE _name = 'Lamesaber';
+SELECT * FROM weapons WHERE _name = 'Lightsaber';
 -- Delete
 DELETE FROM weapons WHERE _name = 'Lightsaber';
 -- table: countries
@@ -29,27 +30,36 @@ HAVING _element = ANY('{Dendro, Electro, Geo}'::t_element[])
 ORDER BY _element ASC;
 -- Update
 UPDATE countries SET _archont = 'Bebra', _element = 'Physical' WHERE _name = 'Amogus ship';
+SELECT *
+FROM countries
+WHERE _name = 'Amogus ship';
 -- Delete
 DELETE FROM countries WHERE _archont = 'Bebra';
 --
 -- task 6: motivated queries
 
 -- 1: Найти 3-его юнита по электро урону (берётся сумма всех электро навыков)
-SELECT DISTINCT res._unit_id, res._damage
-FROM (SELECT u._id AS _unit_id, (st._damage + sum (sk._base_damage) OVER (PARTITION BY u._id)) AS _damage
-       FROM units AS u
-       INNER JOIN characters ON characters._name = u._character AND characters._element = 'Electro'
-       INNER JOIN skills AS sk ON characters._elemental_skill = sk._name OR characters._ultimate_skill = sk._name
-       INNER JOIN weapons ON u._weapon = weapons._name
-       INNER JOIN stats AS st ON weapons._stats = st._id) res
-ORDER BY _damage desc
-LIMIT 1 OFFSET 2;
+SELECT res._unit_id AS unit_id, res._damage AS damage 
+FROM (SELECT *, NTH_VALUE(_damage, 3) 
+        OVER(
+            ORDER BY _damage DESC
+            RANGE BETWEEN 
+                UNBOUNDED PRECEDING AND 
+                UNBOUNDED FOLLOWING
+        ) AS _top_3_damage
+        FROM (SELECT u._id AS _unit_id, 
+           ((SELECT (CASE WHEN c._weapon_type = 'Catalyst' THEN u._weapon_attack_damage ELSE 0 END)) + u._elemental_skill_damage + u._ultimate_skill_damage) AS _damage
+           FROM units AS u
+           INNER JOIN "characters" c ON c._name = u._character
+           WHERE c._element = 'Electro')
+    ) res
+WHERE res._damage = res._top_3_damage;
 
--- 2: Максимальное значение хила от элементального навыка у юнитов из Инадзумы
-SELECT max (skills._base_heal)
-FROM skills
-INNER JOIN characters ON characters._elemental_skill = skills._name
-WHERE skills._type = 'Elemental' and characters._country = 'Inazuma';
+-- 2: Юнит с максимальным лечением от элементального навыка из Инадзумы
+SELECT max (_elemental_skill_heal)
+FROM units
+INNER JOIN characters ON characters._name = units._character
+WHERE characters._country = 'Inazuma';
 
 -- 3: Для каждой страны вычислить количество персонажей и юнитов
 SELECT countries._name country, COALESCE(counter.char_cnt, 0) characters_cnt, COALESCE(counter.unit_cnt, 0) units_cnt
